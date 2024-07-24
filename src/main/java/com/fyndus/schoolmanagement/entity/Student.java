@@ -8,11 +8,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Entity
 @Table(name="student")
 @Data
 public class Student {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +22,6 @@ public class Student {
     private String address;
     @ManyToOne
     private School school;
-    public Student() {}
-
-    public Student(Long student) {
-        this.id=student;
-    }
+    private Instant createdAt;
+    private Instant updatedAt;
 }

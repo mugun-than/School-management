@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Entity
 @Table(name="tutor_salary")
 @Data
@@ -20,4 +22,6 @@ public class TutorSalary {
     private Tutor tutor ;
     private String month;
     private Double salary;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

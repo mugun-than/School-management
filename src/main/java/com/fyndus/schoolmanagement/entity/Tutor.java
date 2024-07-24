@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Entity
 @Table(name="tutor")
 @Data
@@ -24,4 +26,6 @@ public class Tutor {
     private String name;
     @ManyToOne
     private School school;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

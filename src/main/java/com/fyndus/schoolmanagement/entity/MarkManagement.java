@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Entity
 @Table(name="mark_management")
 @Data
@@ -21,4 +23,6 @@ public class MarkManagement {
     @ManyToOne
     private Course course;
     private Integer mark;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

@@ -8,21 +8,17 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.Instant;
 
 @Entity
 @Table(name="course")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Course {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    public Course(Long id) {
-        this.id = id;
-    }
+    private Instant createdAt;
+    private Instant updatedAt;
 }
