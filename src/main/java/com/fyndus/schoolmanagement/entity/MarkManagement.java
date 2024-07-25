@@ -11,7 +11,7 @@ import lombok.Data;
 import java.time.Instant;
 
 @Entity
-@Table(name="mark_management")
+@Table
 @Data
 public class MarkManagement {
 

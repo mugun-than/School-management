@@ -24,7 +24,7 @@ public class StudentAnswer {
     private Course course;
     @ManyToOne
     private Question question;
-    private String studentAns;
+    private Long studentAns;
     private Instant createdAt;
     private Instant updatedAt;
 }

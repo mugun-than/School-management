@@ -1,18 +1,15 @@
 package com.fyndus.schoolmanagement.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
 
 @Entity
-@Table(name="student")
+@Table(name = "student")
 @Data
+@Builder
 public class Student {
 
     @Id
