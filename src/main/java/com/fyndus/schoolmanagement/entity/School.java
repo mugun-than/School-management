@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jdk.jshell.Snippet;
+import lombok.Builder;
 import lombok.Data;
 
 
@@ -13,6 +15,7 @@ import java.time.Instant;
 @Entity
 @Table(name="school")
 @Data
+@Builder
 public class School {
 
     @Id

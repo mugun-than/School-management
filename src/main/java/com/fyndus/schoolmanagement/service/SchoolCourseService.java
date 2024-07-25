@@ -26,7 +26,8 @@ public class SchoolCourseService {
         return this.schoolCourseRepo.findById(schoolCourseId).orElse(null);
     }
 
-    public List<SchoolCourse> findBySchool(School school) {
+    public List<SchoolCourse> findBySchool(Long schoolId) {
+        School school = School.builder().id(schoolId).build();
         return this.schoolCourseRepo.findBySchool(school);
     }
 
@@ -53,7 +54,8 @@ public class SchoolCourseService {
         return "SchoolCourse with id: "+schoolCourseId+" deleted";
     }
 
-    public String deleteBySchool(School school) {
+    public String deleteBySchool(Long schoolId) {
+        School school = School.builder().id(schoolId).build();
         this.schoolCourseRepo.deleteBySchool(school);
         return "SchoolCourse belonging to school: "+school.getName()+" deleted";
     }

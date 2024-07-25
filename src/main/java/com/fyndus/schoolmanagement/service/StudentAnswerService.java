@@ -1,5 +1,6 @@
 package com.fyndus.schoolmanagement.service;
 
+import com.fyndus.schoolmanagement.DTO.QuestionDTO;
 import com.fyndus.schoolmanagement.DTO.StudentAnswerDTO;
 import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.entity.Question;
@@ -49,19 +50,26 @@ public class StudentAnswerService {
         return this.studentAnswerRepo.findAll();
     }
 
-    public List<StudentAnswer> findByCourse(Course course) {
+    public List<StudentAnswer> findByCourse(Long courseId) {
+
+        Course course = Course.builder().id(courseId).build();
         return this.studentAnswerRepo.findByCourse(course);
     }
 
-    public List<StudentAnswer> findByStudent(Student student) {
+    public List<StudentAnswer> findByStudent(Long studentId) {
+        Student student = Student.builder().id(studentId).build();
         return this.studentAnswerRepo.findByStudent(student);
     }
 
-    public List<StudentAnswer> findByStudentAndCourse(Student student, Course course) {
+    public List<StudentAnswer> findByStudentAndCourse(Long studentId, Long courseId) {
+        Course course = Course.builder().id(courseId).build();
+        Student student = Student.builder().id(studentId).build();
         return this.studentAnswerRepo.findAllByStudentAndCourse(student, course);
     }
 
-    public StudentAnswer findByStudentAndQuestion(Student student, Question question) {
+    public StudentAnswer findByStudentAndQuestion(Long studentId, Long questionId) {
+        Student student = Student.builder().id(studentId).build();
+        Question question = Question.builder().id(questionId).build();
         return this.studentAnswerRepo.findByStudentAndQuestion(student, question);
     }
 
