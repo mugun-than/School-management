@@ -19,36 +19,36 @@ public class StudentAnswerController {
 
     @GetMapping()
     public String getStudentAnswerDTO(@RequestBody StudentAnswerDTO studentAnswerDTO) {
-        return studentAnswerService.getStudentAnswerDTO(studentAnswerDTO);
+        return this.studentAnswerService.getStudentAnswerDTO(studentAnswerDTO);
     }
 
     @GetMapping("/{studentAnswerId}")
     public StudentAnswer findById(@PathVariable Long studentAnswerId) {
-        return studentAnswerService.findById(studentAnswerId);
+        return this.studentAnswerService.findById(studentAnswerId);
     }
 
     @GetMapping()
     public List<StudentAnswer> findAll() {
-        return studentAnswerService.findAll();
+        return this.studentAnswerService.findAll();
     }
 
     @GetMapping("/course/{courseId}")
     public List<StudentAnswer> findByCourse(@PathVariable Long courseId) {
-        return studentAnswerService.findByCourse(courseId);
+        return this.studentAnswerService.findByCourse(courseId);
     }
 
     @GetMapping("/student/{studentId}")
     public List<StudentAnswer> findByStudent(@PathVariable Long studentId) {
-        return studentAnswerService.findByStudent(studentId);
+        return this.studentAnswerService.findByStudent(studentId);
     }
 
     @GetMapping("/student/course/{studentId}/{courseId}")
     public List<StudentAnswer> findByStudentAndCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
-        return studentAnswerService.findByStudentAndCourse(studentId, courseId);
+        return this.studentAnswerService.findByStudentAndCourse(studentId, courseId);
     }
 
     @GetMapping("/student/question/{studentId}/{questionId}")
     public StudentAnswer findByStudentAndQuestion(@PathVariable Long studentId, @PathVariable Long questionId) {
-        return studentAnswerService.findByStudentAndQuestion(studentId, questionId);
+        return this.studentAnswerService.findByStudentAndQuestion(studentId, questionId);
     }
 }

@@ -68,5 +68,17 @@ public class MarkManagementService {
         return "Student: "+student.getName()+" has been updated mark to: "+mark+"in course: "+course.getName();
     }
 
-    // enter delete business logic
+    public List<MarkManagement> findAll() {
+        return this.markManagementRepo.findAll();
+    }
+
+    public String deleteAll() {
+        this.markManagementRepo.deleteAll();
+        return "All Marks deleted";
+    }
+
+    public String deleteById(Long markManagementId) {
+        this.markManagementRepo.deleteById(markManagementId);
+        return "Mark with id: "+markManagementId+" deleted";
+    }
 }

@@ -52,30 +52,30 @@ public class StudentAnswerService {
 
     public List<StudentAnswer> findByCourse(Long courseId) {
 
-        Course course = Course.builder().id(courseId).build();
+        final Course course = Course.builder().id(courseId).build();
         return this.studentAnswerRepo.findByCourse(course);
     }
 
     public List<StudentAnswer> findByStudent(Long studentId) {
-        Student student = Student.builder().id(studentId).build();
+        final Student student = Student.builder().id(studentId).build();
         return this.studentAnswerRepo.findByStudent(student);
     }
 
     public List<StudentAnswer> findByStudentAndCourse(Long studentId, Long courseId) {
-        Course course = Course.builder().id(courseId).build();
-        Student student = Student.builder().id(studentId).build();
+        final Course course = Course.builder().id(courseId).build();
+        final Student student = Student.builder().id(studentId).build();
         return this.studentAnswerRepo.findAllByStudentAndCourse(student, course);
     }
 
     public StudentAnswer findByStudentAndQuestion(Long studentId, Long questionId) {
-        Student student = Student.builder().id(studentId).build();
-        Question question = Question.builder().id(questionId).build();
+        final Student student = Student.builder().id(studentId).build();
+        final Question question = Question.builder().id(questionId).build();
         return this.studentAnswerRepo.findByStudentAndQuestion(student, question);
     }
 
     public String updateStudentAnswerByStudentAnswerDTO(StudentAnswerDTO studentAnswerDTO) {
-        Student student = Student.builder().id(studentAnswerDTO.getStudentId()).build();
-        Course course = Course.builder().id(studentAnswerDTO.getCourseId()).build();
+        final Student student = Student.builder().id(studentAnswerDTO.getStudentId()).build();
+        final Course course = Course.builder().id(studentAnswerDTO.getCourseId()).build();
         List<StudentAnswer> result = studentAnswerRepo.findAllByStudentAndCourse(student, course);
         if(result.isEmpty()) return "Student entry doesn't exists";
         for(StudentAnswer answer : result) {

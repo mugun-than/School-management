@@ -30,7 +30,8 @@ public class StudentService {
         return this.studentRepo.findAll();
     }
 
-    public List<Student> findBySchool(School school) {
+    public List<Student> findBySchool(Long schoolId) {
+        final School school = School.builder().id(schoolId).build();
         return this.studentRepo.findBySchool(school);
     }
 
@@ -54,7 +55,8 @@ public class StudentService {
         return "Student with id: "+studentId+" deleted";
     }
 
-    public String deleteBySchool(School school) {
+    public String deleteBySchool(Long schoolId) {
+        final School school = School.builder().id(schoolId).build();
         this.studentRepo.deleteBySchool(school);
         return " Students belonging to school: "+school.getName()+" deleted";
     }

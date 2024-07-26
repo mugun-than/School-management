@@ -29,11 +29,13 @@ public class StudentCourseService {
         return this.studentCourseRepo.findAll();
     }
 
-    public List<StudentCourse> findByStudent(Student student) {
+    public List<StudentCourse> findByStudent(Long studentId) {
+        final Student student = Student.builder().id(studentId).build();
         return this.studentCourseRepo.findByStudent(student);
     }
 
-    public List<StudentCourse> findByCourse(Course course) {
+    public List<StudentCourse> findByCourse(Long courseId) {
+        final Course course = Course.builder().id(courseId).build();
         return this.studentCourseRepo.findByCourse(course);
     }
 
@@ -61,18 +63,15 @@ public class StudentCourseService {
         return "All studentCourse deleted";
     }
 
-    public String deleteByStudent(Student student) {
+    public String deleteByStudent(Long studentId) {
+        final Student student = Student.builder().id(studentId).build();
         this.studentCourseRepo.deleteByStudent(student);
         return "All studentCourse with student: "+student.getName()+" deleted";
     }
 
-    public String deleteByCourse(Course course) {
+    public String deleteByCourse(Long courseId) {
+        final Course course = Course.builder().id(courseId).build();
         this.studentCourseRepo.deleteByCourse(course);
         return "All studentCourse with course: "+course.getName()+" deleted";
-    }
-
-    public String deleteBYTutor(Tutor tutor) {
-        this.studentCourseRepo.deleteByTutor(tutor);
-        return "All studentCourse with tutor: "+tutor.getName()+" deleted";
     }
 }

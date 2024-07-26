@@ -18,31 +18,31 @@ public class CourseController {
 
     @PostMapping()
     public Course createCourse(@RequestBody Course course) {
-        return courseService.createCourse(course);
+        return this.courseService.createCourse(course);
     }
 
     @GetMapping()
     public List<Course> findAll() {
-        return courseService.findAll();
+        return this.courseService.findAll();
     }
 
     @GetMapping("/{courseId}")
     public Course findById(@PathVariable Long courseId) {
-        return courseService.findById(courseId);
+        return this.courseService.findById(courseId);
     }
 
     @PutMapping("/{courseId}")
     public Course updateCourse(@PathVariable Long courseId, @RequestBody Course course) {
-        return courseService.updateCourse(courseId, course);
+        return this.courseService.updateCourse(courseId, course);
     }
 
     @DeleteMapping()
     public String deleteAll(){
-        return courseService.deleteAll();
+        return this.courseService.deleteAll();
     }
 
     @DeleteMapping("/{courseId}")
     public String deleteById(@PathVariable Long courseId) {
-        return courseService.deleteById(courseId);
+        return this.courseService.deleteById(courseId);
     }
 }

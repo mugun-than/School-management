@@ -18,41 +18,41 @@ public class SchoolCourseController {
 
     @PostMapping()
     public SchoolCourse createSchoolCourse(@RequestBody SchoolCourse schoolCourse) {
-        return schoolCourseService.createSchoolCourse(schoolCourse);
+        return this.schoolCourseService.createSchoolCourse(schoolCourse);
     }
 
     @GetMapping()
     public List<SchoolCourse> findAll() {
-        return schoolCourseService.findAll();
+        return this.schoolCourseService.findAll();
     }
 
     @GetMapping("/{schoolCourseId}")
     public SchoolCourse findById(@PathVariable Long schoolCourseId) {
-        return schoolCourseService.findById(schoolCourseId);
+        return this.schoolCourseService.findById(schoolCourseId);
     }
 
     @GetMapping("/school/{schoolId}")
     public List<SchoolCourse> findBySchool(@PathVariable Long schoolId) {
-        return schoolCourseService.findBySchool(schoolId);
+        return this.schoolCourseService.findBySchool(schoolId);
     }
 
     @PutMapping("/{schoolCourseId}")
     public SchoolCourse updateSchoolCourse(@PathVariable Long schoolCourseId, @RequestBody SchoolCourse schoolCourse) {
-        return schoolCourseService.updateSchoolCourse(schoolCourseId, schoolCourse);
+        return this.schoolCourseService.updateSchoolCourse(schoolCourseId, schoolCourse);
     }
 
     @DeleteMapping()
     public String deleteAll() {
-        return schoolCourseService.deleteAll();
+        return this.schoolCourseService.deleteAll();
     }
 
     @DeleteMapping("/{schoolCourseId}")
     public String deleteById(@PathVariable Long schoolCourseId) {
-        return schoolCourseService.deleteById(schoolCourseId);
+        return this.schoolCourseService.deleteById(schoolCourseId);
     }
 
     @DeleteMapping("/school/{schoolId}")
     public String deleteBySchool(@PathVariable Long schoolId) {
-        return schoolCourseService.deleteBySchool(schoolId);
+        return this.schoolCourseService.deleteBySchool(schoolId);
     }
 }

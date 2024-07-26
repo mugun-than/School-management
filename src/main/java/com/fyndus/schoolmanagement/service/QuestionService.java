@@ -24,7 +24,8 @@ public class QuestionService {
         return this.questionRepo.save(question);
     }
 
-    public List<Question> findByCourse(Course course) {
+    public List<Question> findByCourse(Long courseId) {
+        final Course course = Course.builder().id(courseId).build();
         return this.questionRepo.findByCourse(course);
     }
 
@@ -72,7 +73,8 @@ public class QuestionService {
         return "Question with id: "+questionId+" deleted";
     }
 
-    public String deleteByCourse(Course course) {
+    public String deleteByCourse(Long courseId) {
+        final Course course = Course.builder().id(courseId).build();
         this.questionRepo.deleteByCourse(course);
         return "Question of course: "+course.getName()+" deleted";
     }

@@ -5,6 +5,7 @@ import com.fyndus.schoolmanagement.entity.School;
 import com.fyndus.schoolmanagement.entity.Tutor;
 import com.fyndus.schoolmanagement.entity.TutorCourse;
 import com.fyndus.schoolmanagement.repository.TutorCourseRepository;
+import org.hibernate.query.derived.AnonymousTupleTableGroupProducer;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -28,7 +29,12 @@ public class TutorCourseService {
         return this.tutorCourseRepo.findById(tutorCourseId).orElse(null);
     }
 
-    public List<TutorCourse> findByCourse(Course course) {
+    public List<TutorCourse> findAll() {
+        return this.tutorCourseRepo.findAll();
+    }
+
+    public List<TutorCourse> findByCourse(Long courseId) {
+        final Course course = Course.builder().id(courseId).build();
         return this.tutorCourseRepo.findByCourse(course);
     }
 
@@ -51,12 +57,14 @@ public class TutorCourseService {
         return "TutorCourse with id: "+tutorCourseId+" deleted";
     }
 
-    public String deleteByCourse(Course course) {
+    public String deleteByCourse(Long courseId) {
+        final Course course = Course.builder().id(courseId).build();
         this.tutorCourseRepo.deleteByCourse(course);
         return "All tutorCourse with course "+course.getName()+" daleted";
     }
 
-    public String deleteByTutor(Tutor tutor) {
+    public String deleteByTutor(Long tutorId) {
+        final Tutor tutor = Tutor.builder().id(tutorId).build();
         this.tutorCourseRepo.deleteByTutor(tutor);
         return "All tutorCourse with tutor: "+tutor.getName()+" deleted";
     }

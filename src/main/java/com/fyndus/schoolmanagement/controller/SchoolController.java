@@ -18,31 +18,31 @@ public class SchoolController {
 
     @PostMapping()
     public School createSchool(@RequestBody School school) {
-        return schoolService.createSchool(school);
+        return this.schoolService.createSchool(school);
     }
 
     @GetMapping()
     public List<School> findAll() {
-        return schoolService.findAll();
+        return this.schoolService.findAll();
     }
 
     @GetMapping("/{schoolId}")
     public School findById(@PathVariable Long schoolId){
-        return schoolService.findById(schoolId);
+        return this.schoolService.findById(schoolId);
     }
 
     @PutMapping("/{schoolId}")
     public School updateSchool(@PathVariable Long schoolId, @RequestBody School school) {
-        return schoolService.updateSchool(schoolId, school);
+        return this.schoolService.updateSchool(schoolId, school);
     }
 
     @DeleteMapping()
     public String deleteAll() {
-        return schoolService.deleteAll();
+        return this.schoolService.deleteAll();
     }
 
     @DeleteMapping("/{schoolId}")
     public String deleteById(@PathVariable Long schoolId) {
-        return schoolService.deleteById(schoolId);
+        return this.schoolService.deleteById(schoolId);
     }
 }

@@ -23,11 +23,16 @@ public class TutorSalaryService {
         return this.tutorSalaryRepo.save(tutorSalary);
     }
 
+    public List<TutorSalary> findAll() {
+        return this.tutorSalaryRepo.findAll();
+    }
+
     public TutorSalary findById(Long tutorSalaryId) {
         return this.tutorSalaryRepo.findById(tutorSalaryId).orElse(null);
     }
 
-    public List<TutorSalary> findByTutor(Tutor tutor) {
+    public List<TutorSalary> findByTutor(Long tutorId) {
+        final Tutor tutor = Tutor.builder().id(tutorId).build();
         return this.tutorSalaryRepo.findByTutor(tutor);
     }
 
@@ -45,8 +50,14 @@ public class TutorSalaryService {
         return "All tutorSalary deleted";
     }
 
-    public String deleteByTutor(Tutor tutor) {
+    public String deleteByTutor(Long tutorId) {
+        final Tutor tutor = Tutor.builder().id(tutorId).build();
         this.tutorSalaryRepo.deleteByTutor(tutor);
         return "All tutorSalary of tutor: "+tutor.getName()+" deleted";
+    }
+
+    public String deleteById(Long tutorSalaryId) {
+        this.tutorSalaryRepo.deleteById(tutorSalaryId);
+        return " Tutor: "+tutorSalaryId+" deleted";
     }
 }

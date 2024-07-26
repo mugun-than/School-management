@@ -18,7 +18,7 @@ public class SchoolCourseService {
     }
 
     public SchoolCourse createSchoolCourse(SchoolCourse schoolCourse) {
-        schoolCourse.setCreatedAt(Instant.now());
+        final schoolCourse.setCreatedAt(Instant.now());
         return this.schoolCourseRepo.save(schoolCourse);
     }
 
@@ -27,7 +27,7 @@ public class SchoolCourseService {
     }
 
     public List<SchoolCourse> findBySchool(Long schoolId) {
-        School school = School.builder().id(schoolId).build();
+        final School school = School.builder().id(schoolId).build();
         return this.schoolCourseRepo.findBySchool(school);
     }
 
@@ -55,7 +55,7 @@ public class SchoolCourseService {
     }
 
     public String deleteBySchool(Long schoolId) {
-        School school = School.builder().id(schoolId).build();
+        final School school = School.builder().id(schoolId).build();
         this.schoolCourseRepo.deleteBySchool(school);
         return "SchoolCourse belonging to school: "+school.getName()+" deleted";
     }

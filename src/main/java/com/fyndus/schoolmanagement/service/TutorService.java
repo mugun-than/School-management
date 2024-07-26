@@ -26,7 +26,8 @@ public class TutorService {
         return this.tutorRepo.findById(tutorId).orElse(null);
     }
 
-    public List<Tutor> findBySchool(School school) {
+    public List<Tutor> findBySchool(Long schoolId) {
+        final School school = School.builder().id(schoolId).build();
         return this.tutorRepo.findBySchool(school);
     }
 
@@ -54,7 +55,8 @@ public class TutorService {
         return "Tutor with id: "+tutorId+" deleted";
     }
 
-    public String deleteBySchool(School school) {
+    public String deleteBySchool(Long schoolId) {
+        final School school = School.builder().id(schoolId).build();
         this.tutorRepo.deleteBySchool(school);
         return "Tutor of school: "+school.getName()+" deleted";
     }
