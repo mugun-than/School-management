@@ -1,7 +1,9 @@
 package com.fyndus.schoolmanagement.controller;
 
 import com.fyndus.schoolmanagement.entity.Student;
+import com.fyndus.schoolmanagement.repository.SchoolRepository;
 import com.fyndus.schoolmanagement.service.StudentService;
+import jakarta.transaction.Transactional;
 import jdk.dynalink.linker.LinkerServices;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +14,16 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    private final SchoolRepository schoolRepo;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, SchoolRepository schoolRepo) {
         this.studentService = studentService;
+        this.schoolRepo = schoolRepo;
     }
 
-    @PostMapping()
-    public Student createStudent(Student student) {
+    @PostMapping("/{schoolId}")
+    public Student createStudent(@PathVariable   Long schoolId, @RequestBody Student student) {
+        student.setSchool(schoolRepo.findById(schoolId).orElse(null));
         return this.studentService.createStudent(student);
     }
 
@@ -38,7 +43,7 @@ public class StudentController {
     }
 
     @PutMapping("/{studentId}")
-    public Student updateStudent(@PathVariable Long studentId, Student student) {
+    public Student updateStudent(@PathVariable Long studentId, @RequestBody Student student) {
         return this.studentService.updateStudent(studentId, student);
     }
 
@@ -52,6 +57,7 @@ public class StudentController {
         return this.studentService.deleteById(studentId);
     }
 
+    @Transactional
     @DeleteMapping("/school/{schoolId}")
     public String deleteBySchool(@PathVariable Long schoolId) {
         return this.studentService.deleteBySchool(schoolId);

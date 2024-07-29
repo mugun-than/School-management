@@ -15,7 +15,7 @@ public class QuestionService {
 
     private final QuestionRepository questionRepo;
 
-    public QuestionService(QuestionRepository questionRepo, QuestionDTO questionDTO) {
+    public QuestionService(QuestionRepository questionRepo) {
         this.questionRepo = questionRepo;
     }
 
@@ -26,7 +26,7 @@ public class QuestionService {
 
     public List<Question> findByCourse(Long courseId) {
         final Course course = Course.builder().id(courseId).build();
-        return this.questionRepo.findByCourse(course);
+        return this.questionRepo.findAllByCourse(course);
     }
 
     public List<Question> findAll() {
@@ -38,7 +38,7 @@ public class QuestionService {
     }
 
     public List<QuestionDTO> getQuestionForTestByCourse(Course course) {
-        final List<Question> result = this.questionRepo.findByCourse(course);
+        final List<Question> result = this.questionRepo.findAllByCourse(course);
         final List<QuestionDTO> questionDTOList = new ArrayList<>();
         for(Question question : result) {
             QuestionDTO questionDTO = new QuestionDTO();

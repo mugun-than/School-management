@@ -3,6 +3,7 @@ package com.fyndus.schoolmanagement.controller;
 import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.entity.Question;
 import com.fyndus.schoolmanagement.service.QuestionService;
+import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{questionId}")
-    public Question updateQuestion(@PathVariable Long questionId, Question question) {
+    public Question updateQuestion(@PathVariable Long questionId, @RequestBody Question question) {
         return this.questionService.updateQuestion(questionId, question);
     }
 
@@ -52,6 +53,7 @@ public class QuestionController {
         return this.questionService.deleteById(questionId);
     }
 
+    @Transactional
     @DeleteMapping("/course/{courseId}")
     public String deleteByCourse(@PathVariable Long courseId) {
         return this.questionService.deleteByCourse(courseId);

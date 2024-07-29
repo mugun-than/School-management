@@ -1,8 +1,10 @@
 package com.fyndus.schoolmanagement.controller;
 
 import com.fyndus.schoolmanagement.DTO.StudentAnswerDTO;
+import com.fyndus.schoolmanagement.entity.Student;
 import com.fyndus.schoolmanagement.entity.StudentAnswer;
 import com.fyndus.schoolmanagement.service.StudentAnswerService;
+import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class StudentAnswerController {
         this.studentAnswerService = studentAnswerService;
     }
 
-    @GetMapping()
-    public String getStudentAnswerDTO(@RequestBody StudentAnswerDTO studentAnswerDTO) {
+    @PostMapping()
+    public String getStudentAnswer(@RequestBody StudentAnswerDTO studentAnswerDTO) {
         return this.studentAnswerService.getStudentAnswerDTO(studentAnswerDTO);
     }
 
@@ -50,5 +52,39 @@ public class StudentAnswerController {
     @GetMapping("/student/question/{studentId}/{questionId}")
     public StudentAnswer findByStudentAndQuestion(@PathVariable Long studentId, @PathVariable Long questionId) {
         return this.studentAnswerService.findByStudentAndQuestion(studentId, questionId);
+    }
+
+    @PutMapping()
+    public String updateStudentAnswerByStudentAnswerDTO(@RequestBody StudentAnswerDTO studentAnswerDTO) {
+        return this.studentAnswerService.updateStudentAnswerByStudentAnswerDTO(studentAnswerDTO);
+    }
+
+    @DeleteMapping()
+    public String deleteAll() {
+        return this.studentAnswerService.deleteAll();
+    }
+
+    @Transactional
+    @DeleteMapping("/{studentAnswerId}")
+    public String deleteById(@PathVariable Long studentAnswerId) {
+        return this.studentAnswerService.deleteById(studentAnswerId);
+    }
+
+    @Transactional
+    @DeleteMapping("/student/{studentId}")
+    public String deleteByStudent(@PathVariable Long studentId) {
+        return this.studentAnswerService.deleteByStudent(studentId);
+    }
+
+    @Transactional
+    @DeleteMapping("/course/{courseId}")
+    public String deleteByCourse(@PathVariable Long courseId) {
+        return this.studentAnswerService.deleteByCourse(courseId);
+    }
+
+    @Transactional
+    @DeleteMapping("/student/course/{studentId}/{courseId}")
+    public String deleteByStudentAndCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
+        return this.studentAnswerService.deleteByStudentAndCourse(studentId, courseId);
     }
 }

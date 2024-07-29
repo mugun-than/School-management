@@ -13,11 +13,5 @@ import java.util.List;
 public interface StudentCourseRepository extends JpaRepository<StudentCourse, Long> {
     List<StudentCourse> findByStudent(Student student);
 
-    List<StudentCourse> findByCourse(Course course);
-
     void deleteByStudent(Student student);
-
-    void deleteByCourse(Course course);
-
-    void deleteByTutor(Tutor tutor);
 }

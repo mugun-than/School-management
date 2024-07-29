@@ -2,6 +2,7 @@ package com.fyndus.schoolmanagement.controller;
 
 import com.fyndus.schoolmanagement.entity.MarkManagement;
 import com.fyndus.schoolmanagement.service.MarkManagementService;
+import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.yaml.snakeyaml.error.Mark;
 
@@ -36,6 +37,7 @@ public class MarkManagementController {
     public String deleteAll() {
         return this.markManagementService.deleteAll();
     }
+
 
     @DeleteMapping("/{markManagementId}")
     public String deleteById(@PathVariable Long markMangementId) {

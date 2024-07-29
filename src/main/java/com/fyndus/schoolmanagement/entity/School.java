@@ -6,8 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jdk.jshell.Snippet;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 import java.time.Instant;
@@ -16,6 +18,8 @@ import java.time.Instant;
 @Table(name="school")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class School {
 
     @Id

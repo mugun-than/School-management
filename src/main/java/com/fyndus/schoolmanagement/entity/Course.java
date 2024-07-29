@@ -16,6 +16,8 @@ import java.time.Instant;
 @Table(name="course")
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Course {
 
     @Id

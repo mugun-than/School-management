@@ -15,10 +15,14 @@ public class MarkManagementService {
 
     private final MarkManagementRepository markManagementRepo;
     private final StudentAnswerRepository studentAnswerRepo;
+    private final StudentRepository studentRepo;
+    private final CourseRepository courseRepo;
 
-    public MarkManagementService(MarkManagementRepository markManagementRepo, StudentAnswerRepository studentAnswerRepo) {
+    public MarkManagementService(MarkManagementRepository markManagementRepo, StudentAnswerRepository studentAnswerRepo, StudentRepository studentRepo, CourseRepository courseRepo) {
         this.markManagementRepo = markManagementRepo;
         this.studentAnswerRepo = studentAnswerRepo;
+        this.studentRepo = studentRepo;
+        this.courseRepo = courseRepo;
     }
 
     public void createMarkEntry(MarkManagement markManagement) {
@@ -28,8 +32,8 @@ public class MarkManagementService {
 
     public String calculateMarkForStudent(Long studentId, Long courseId) {
 
-        final Student student = Student.builder().id(studentId).build();
-        final Course course = Course.builder().id(courseId).build();
+        final Student student = this.studentRepo.findById(studentId).orElseThrow(NullPointerException::new);
+        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
 
         MarkManagement markManagement = this.markManagementRepo.findByStudentAndCourse(student, course);
         if(markManagement != null) return "Student: "+markManagement.getStudent().getName()+" has scored a mark: "+markManagement.getMark();
@@ -51,8 +55,8 @@ public class MarkManagementService {
     }
 
     public String updateStudentMarkByCourse(Long studentId, Long courseId) {
-        final Student student = Student.builder().id(studentId).build();
-        final Course course = Course.builder().id(courseId).build();
+        final Student student = this.studentRepo.findById(studentId).orElseThrow(NullPointerException::new);
+        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
 
         final MarkManagement markManagement = this.markManagementRepo.findByStudentAndCourse(student, course);
         if(markManagement == null) return "Mark entry doesn't exists";
@@ -65,7 +69,7 @@ public class MarkManagementService {
         markManagement.setMark(mark);
         markManagement.setUpdatedAt(Instant.now());
         this.markManagementRepo.save(markManagement);
-        return "Student: "+student.getName()+" has been updated mark to: "+mark+"in course: "+course.getName();
+        return "Student: "+student.getName()+" has been updated mark to: "+mark+" in course: "+course.getName();
     }
 
     public List<MarkManagement> findAll() {

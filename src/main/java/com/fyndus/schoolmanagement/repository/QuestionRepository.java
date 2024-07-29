@@ -9,7 +9,8 @@ import java.util.List;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    List<Question> findByCourse(Course course);
 
     void deleteByCourse(Course course);
+
+    List<Question> findAllByCourse(Course course);
 }

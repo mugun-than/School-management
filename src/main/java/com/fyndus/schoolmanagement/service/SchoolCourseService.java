@@ -1,8 +1,12 @@
 package com.fyndus.schoolmanagement.service;
 
+import com.fyndus.schoolmanagement.DTO.SchoolCourseDTO;
+import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.entity.School;
 import com.fyndus.schoolmanagement.entity.SchoolCourse;
+import com.fyndus.schoolmanagement.repository.CourseRepository;
 import com.fyndus.schoolmanagement.repository.SchoolCourseRepository;
+import com.fyndus.schoolmanagement.repository.SchoolRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -12,13 +16,25 @@ import java.util.List;
 public class SchoolCourseService {
 
     private final SchoolCourseRepository schoolCourseRepo;
+    private final SchoolRepository schoolRepo;
+    private final CourseRepository courseRepo;
 
-    public SchoolCourseService(SchoolCourseRepository schoolCourseRepo) {
+    public SchoolCourseService(SchoolCourseRepository schoolCourseRepo, CourseRepository courseRepo, SchoolRepository schoolRepo) {
         this.schoolCourseRepo = schoolCourseRepo;
+        this.schoolRepo = schoolRepo;
+        this.courseRepo = courseRepo;
     }
 
-    public SchoolCourse createSchoolCourse(SchoolCourse schoolCourse) {
-        final schoolCourse.setCreatedAt(Instant.now());
+    public SchoolCourse createSchoolCourseByDTO(SchoolCourseDTO schoolCourseDTO) {
+        School school = schoolRepo.findByName(schoolCourseDTO.getSchoolName());
+        Course course = courseRepo.findByName(schoolCourseDTO.getCourseName());
+
+        System.out.println(schoolCourseDTO.getSchoolName()+"\n"+schoolCourseDTO.getCourseName());
+        System.out.println(school.getName()+"\n"+course.getName());
+        SchoolCourse schoolCourse = new SchoolCourse();
+        schoolCourse.setSchool(school);
+        schoolCourse.setCourse(course);
+        schoolCourse.setCreatedAt(Instant.now());
         return this.schoolCourseRepo.save(schoolCourse);
     }
 
@@ -35,12 +51,14 @@ public class SchoolCourseService {
         return this.schoolCourseRepo.findAll();
     }
 
-    public SchoolCourse updateSchoolCourse(Long schoolCourseId, SchoolCourse schoolCourse) {
+    public SchoolCourse updateSchoolCourse(Long schoolCourseId, SchoolCourseDTO schoolCourseDTO) {
+        final School school = schoolRepo.findByName(schoolCourseDTO.getSchoolName());
+        final Course course = courseRepo.findByName(schoolCourseDTO.getCourseName());
         final SchoolCourse temp = this.schoolCourseRepo.findById(schoolCourseId).orElse(null);
         if(temp == null) return temp;
         temp.setUpdatedAt(Instant.now());
-        temp.setCourse(schoolCourse.getCourse());
-        temp.setSchool(schoolCourse.getSchool());
+        temp.setCourse(course);
+        temp.setSchool(school);
         return this.schoolCourseRepo.save(temp);
     }
 
@@ -55,8 +73,9 @@ public class SchoolCourseService {
     }
 
     public String deleteBySchool(Long schoolId) {
-        final School school = School.builder().id(schoolId).build();
+        final School school = schoolRepo.findById(schoolId).orElse(null);
         this.schoolCourseRepo.deleteBySchool(school);
+        assert school != null;
         return "SchoolCourse belonging to school: "+school.getName()+" deleted";
     }
 }

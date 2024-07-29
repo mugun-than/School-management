@@ -1,5 +1,6 @@
 package com.fyndus.schoolmanagement.controller;
 
+import com.fyndus.schoolmanagement.DTO.StudentCourseDTO;
 import com.fyndus.schoolmanagement.entity.StudentCourse;
 import com.fyndus.schoolmanagement.service.StudentCourseService;
 import org.springframework.data.repository.query.Param;
@@ -18,8 +19,8 @@ public class StudentCourseController {
     }
 
     @PostMapping()
-    public StudentCourse createStudentCourse(@RequestBody StudentCourse studentCourse) {
-        return this.studentCourseService.createStudentCourse(studentCourse);
+    public StudentCourse createStudentCourse(@RequestBody StudentCourseDTO studentCourseDTO) {
+        return this.studentCourseService.createStudentCourse(studentCourseDTO);
     }
 
     @GetMapping()
@@ -37,10 +38,6 @@ public class StudentCourseController {
         return this.studentCourseService.findByStudent(studentId);
     }
 
-    @GetMapping("/course/{courseId}")
-    public List<StudentCourse> findByCourse(@PathVariable Long courseId) {
-        return this.studentCourseService.findByCourse(courseId);
-    }
     @PutMapping("/{studentCourseId}")
     public StudentCourse updateStudentCourse(@PathVariable Long studentCourseId, @RequestBody StudentCourse studentCourse) {
         return this.studentCourseService.updateStudentCourse(studentCourseId, studentCourse);
@@ -59,10 +56,5 @@ public class StudentCourseController {
     @DeleteMapping("/student/{studentId}")
     public String deleteByStudent(@PathVariable Long studentId) {
         return this.studentCourseService.deleteByStudent(studentId);
-    }
-
-    @DeleteMapping("/course/{courseId}")
-    public String deleteByCourse(@PathVariable Long courseId) {
-        return this.studentCourseService.deleteByCourse(courseId);
     }
 }

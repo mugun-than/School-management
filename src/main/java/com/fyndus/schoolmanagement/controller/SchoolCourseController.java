@@ -1,7 +1,9 @@
 package com.fyndus.schoolmanagement.controller;
 
+import com.fyndus.schoolmanagement.DTO.SchoolCourseDTO;
 import com.fyndus.schoolmanagement.entity.SchoolCourse;
 import com.fyndus.schoolmanagement.service.SchoolCourseService;
+import jakarta.transaction.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,12 +15,13 @@ public class SchoolCourseController {
     private final SchoolCourseService schoolCourseService;
 
     public SchoolCourseController(SchoolCourseService schoolCourseService) {
+
         this.schoolCourseService = schoolCourseService;
     }
 
     @PostMapping()
-    public SchoolCourse createSchoolCourse(@RequestBody SchoolCourse schoolCourse) {
-        return this.schoolCourseService.createSchoolCourse(schoolCourse);
+    public SchoolCourse createSchoolCourse(@RequestBody SchoolCourseDTO schoolCourseDTO) {
+        return this.schoolCourseService.createSchoolCourseByDTO(schoolCourseDTO);
     }
 
     @GetMapping()
@@ -37,8 +40,8 @@ public class SchoolCourseController {
     }
 
     @PutMapping("/{schoolCourseId}")
-    public SchoolCourse updateSchoolCourse(@PathVariable Long schoolCourseId, @RequestBody SchoolCourse schoolCourse) {
-        return this.schoolCourseService.updateSchoolCourse(schoolCourseId, schoolCourse);
+    public SchoolCourse updateSchoolCourse(@PathVariable Long schoolCourseId, @RequestBody SchoolCourseDTO schoolCourseDTO) {
+        return this.schoolCourseService.updateSchoolCourse(schoolCourseId, schoolCourseDTO);
     }
 
     @DeleteMapping()
@@ -51,6 +54,7 @@ public class SchoolCourseController {
         return this.schoolCourseService.deleteById(schoolCourseId);
     }
 
+    @Transactional
     @DeleteMapping("/school/{schoolId}")
     public String deleteBySchool(@PathVariable Long schoolId) {
         return this.schoolCourseService.deleteBySchool(schoolId);

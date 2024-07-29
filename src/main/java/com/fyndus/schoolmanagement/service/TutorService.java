@@ -1,7 +1,9 @@
 package com.fyndus.schoolmanagement.service;
 
+import com.fyndus.schoolmanagement.DTO.TutorDTO;
 import com.fyndus.schoolmanagement.entity.School;
 import com.fyndus.schoolmanagement.entity.Tutor;
+import com.fyndus.schoolmanagement.repository.SchoolRepository;
 import com.fyndus.schoolmanagement.repository.TutorRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +14,18 @@ import java.util.List;
 public class TutorService {
 
     private final TutorRepository tutorRepo;
+    private final SchoolRepository schoolRepo;
 
-    public TutorService(TutorRepository tutorRepo) {
+    public TutorService(TutorRepository tutorRepo, SchoolRepository schoolRepo) {
+        this.schoolRepo = schoolRepo;
         this.tutorRepo = tutorRepo;
     }
 
-    public Tutor createTutor(Tutor tutor) {
+    public Tutor createTutor(TutorDTO tutorDTO) {
+        Tutor tutor = new Tutor();
+        tutor.setName(tutorDTO.getTutorName());
+        tutor.setAddress(tutorDTO.getAddress());
+        tutor.setSchool(schoolRepo.findByName(tutorDTO.getSchoolName()));
         tutor.setCreatedAt(Instant.now());
         return this.tutorRepo.save(tutor);
     }
@@ -56,7 +64,7 @@ public class TutorService {
     }
 
     public String deleteBySchool(Long schoolId) {
-        final School school = School.builder().id(schoolId).build();
+        final School school = schoolRepo.findById(schoolId).orElse(null);
         this.tutorRepo.deleteBySchool(school);
         return "Tutor of school: "+school.getName()+" deleted";
     }
