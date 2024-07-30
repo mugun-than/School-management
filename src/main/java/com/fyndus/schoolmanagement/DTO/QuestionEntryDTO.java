@@ -1,14 +1,13 @@
 package com.fyndus.schoolmanagement.DTO;
-import lombok.*;
+
+import lombok.Data;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class QuestionDTO {
+public class QuestionEntryDTO {
 
-    private Long id;
     private String question;
     private String option1;
     private String option2;
+    private Long ans;
+    private Long courseId;
 }

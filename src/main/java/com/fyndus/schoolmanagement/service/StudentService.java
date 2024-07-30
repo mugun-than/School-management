@@ -1,5 +1,6 @@
 package com.fyndus.schoolmanagement.service;
 
+import com.fyndus.schoolmanagement.DTO.StudentDTO;
 import com.fyndus.schoolmanagement.entity.School;
 import com.fyndus.schoolmanagement.entity.Student;
 import com.fyndus.schoolmanagement.repository.SchoolRepository;
@@ -34,19 +35,17 @@ public class StudentService {
     }
 
     public List<Student> findBySchool(Long schoolId) {
-        final School school = School.builder().id(schoolId).build();
+        final School school = this.schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
         return this.studentRepo.findBySchool(school);
     }
 
-    public Student updateStudent(Long studentId, Student student) {
-        final Student temp = this.studentRepo.findById(studentId).orElse(null);
-        if(temp == null) return temp;
+    public Student updateStudent(Long studentId, StudentDTO studentDTO) {
+        final School school = this.schoolRepo.findById(studentDTO.getSchoolId()).orElseThrow(NullPointerException::new);
+        final Student temp = this.studentRepo.findById(studentId).orElseThrow(NullPointerException::new);
         temp.setUpdatedAt(Instant.now());
-        System.out.println("Student name: "+student.getName());
-
-        temp.setName(student.getName());
-        temp.setAddress(student.getAddress());
-        temp.setSchool(student.getSchool());
+        temp.setName(studentDTO.getName());
+        temp.setAddress(studentDTO.getAddress());
+        temp.setSchool(school);
         return this.studentRepo.save(temp);
     }
 
@@ -61,7 +60,7 @@ public class StudentService {
     }
 
     public String deleteBySchool(Long schoolId) {
-        final School school = schoolRepo.findById(schoolId).orElse(null);
+        final School school = schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
         this.studentRepo.deleteBySchool(school);
         return " Students belonging to school: "+school.getName()+" deleted";
     }

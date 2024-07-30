@@ -64,7 +64,6 @@ public class StudentAnswerController {
         return this.studentAnswerService.deleteAll();
     }
 
-    @Transactional
     @DeleteMapping("/{studentAnswerId}")
     public String deleteById(@PathVariable Long studentAnswerId) {
         return this.studentAnswerService.deleteById(studentAnswerId);

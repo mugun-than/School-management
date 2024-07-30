@@ -1,5 +1,6 @@
 package com.fyndus.schoolmanagement.service;
 
+import com.fyndus.schoolmanagement.DTO.MarkManagementDTO;
 import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.entity.MarkManagement;
 import com.fyndus.schoolmanagement.entity.Student;
@@ -30,10 +31,10 @@ public class MarkManagementService {
         this.markManagementRepo.save(markManagement);
     }
 
-    public String calculateMarkForStudent(Long studentId, Long courseId) {
+    public String calculateMarkForStudent(MarkManagementDTO markManagementDTO) {
 
-        final Student student = this.studentRepo.findById(studentId).orElseThrow(NullPointerException::new);
-        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
+        final Student student = this.studentRepo.findById(markManagementDTO.getStudentId()).orElseThrow(NullPointerException::new);
+        final Course course = this.courseRepo.findById(markManagementDTO.getCourseId()).orElseThrow(NullPointerException::new);
 
         MarkManagement markManagement = this.markManagementRepo.findByStudentAndCourse(student, course);
         if(markManagement != null) return "Student: "+markManagement.getStudent().getName()+" has scored a mark: "+markManagement.getMark();

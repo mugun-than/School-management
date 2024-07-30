@@ -39,8 +39,8 @@ public class TutorController {
     }
 
     @PutMapping("/{tutorId}")
-    public Tutor updateTutor(@PathVariable Long tutorId, @RequestBody Tutor tutor) {
-        return this.tutorService.updateTutor(tutorId, tutor);
+    public Tutor updateTutor(@PathVariable Long tutorId, @RequestBody TutorDTO tutorDTO) {
+        return this.tutorService.updateTutor(tutorId, tutorDTO);
     }
 
     @DeleteMapping()

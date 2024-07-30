@@ -26,12 +26,9 @@ public class SchoolCourseService {
     }
 
     public SchoolCourse createSchoolCourseByDTO(SchoolCourseDTO schoolCourseDTO) {
-        School school = schoolRepo.findByName(schoolCourseDTO.getSchoolName());
-        Course course = courseRepo.findByName(schoolCourseDTO.getCourseName());
-
-        System.out.println(schoolCourseDTO.getSchoolName()+"\n"+schoolCourseDTO.getCourseName());
-        System.out.println(school.getName()+"\n"+course.getName());
-        SchoolCourse schoolCourse = new SchoolCourse();
+        final School school = this.schoolRepo.findByName(schoolCourseDTO.getSchoolName());
+        final Course course = this.courseRepo.findByName(schoolCourseDTO.getCourseName());
+        final SchoolCourse schoolCourse = new SchoolCourse();
         schoolCourse.setSchool(school);
         schoolCourse.setCourse(course);
         schoolCourse.setCreatedAt(Instant.now());
@@ -54,8 +51,7 @@ public class SchoolCourseService {
     public SchoolCourse updateSchoolCourse(Long schoolCourseId, SchoolCourseDTO schoolCourseDTO) {
         final School school = schoolRepo.findByName(schoolCourseDTO.getSchoolName());
         final Course course = courseRepo.findByName(schoolCourseDTO.getCourseName());
-        final SchoolCourse temp = this.schoolCourseRepo.findById(schoolCourseId).orElse(null);
-        if(temp == null) return temp;
+        final SchoolCourse temp = this.schoolCourseRepo.findById(schoolCourseId).orElseThrow(NullPointerException::new);
         temp.setUpdatedAt(Instant.now());
         temp.setCourse(course);
         temp.setSchool(school);
@@ -73,9 +69,8 @@ public class SchoolCourseService {
     }
 
     public String deleteBySchool(Long schoolId) {
-        final School school = schoolRepo.findById(schoolId).orElse(null);
+        final School school = schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
         this.schoolCourseRepo.deleteBySchool(school);
-        assert school != null;
         return "SchoolCourse belonging to school: "+school.getName()+" deleted";
     }
 }

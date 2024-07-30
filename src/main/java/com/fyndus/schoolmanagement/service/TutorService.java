@@ -22,20 +22,20 @@ public class TutorService {
     }
 
     public Tutor createTutor(TutorDTO tutorDTO) {
-        Tutor tutor = new Tutor();
+        final Tutor tutor = new Tutor();
         tutor.setName(tutorDTO.getTutorName());
         tutor.setAddress(tutorDTO.getAddress());
-        tutor.setSchool(schoolRepo.findByName(tutorDTO.getSchoolName()));
+        tutor.setSchool(schoolRepo.findById(tutorDTO.getSchoolId()).orElseThrow(NullPointerException::new));
         tutor.setCreatedAt(Instant.now());
         return this.tutorRepo.save(tutor);
     }
 
     public Tutor findById(Long tutorId) {
-        return this.tutorRepo.findById(tutorId).orElse(null);
+        return this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
     }
 
     public List<Tutor> findBySchool(Long schoolId) {
-        final School school = School.builder().id(schoolId).build();
+        final School school = this.schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
         return this.tutorRepo.findBySchool(school);
     }
 
@@ -43,13 +43,13 @@ public class TutorService {
         return this.tutorRepo.findAll();
     }
 
-    public Tutor updateTutor(Long tutorId, Tutor tutor) {
-        final Tutor temp = this.tutorRepo.findById(tutorId).orElse(null);
-        if(temp == null) return temp;
+    public Tutor updateTutor(Long tutorId, TutorDTO tutorDTO) {
+        final Tutor temp = this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
+        final School school = this.schoolRepo.findById(tutorDTO.getSchoolId()).orElseThrow(NullPointerException::new);
         temp.setUpdatedAt(Instant.now());
-        temp.setAddress(tutor.getAddress());
-        temp.setName(tutor.getName());
-        temp.setSchool(tutor.getSchool());
+        temp.setAddress(tutorDTO.getAddress());
+        temp.setName(tutorDTO.getTutorName());
+        temp.setSchool(school);
         return this.tutorRepo.save(temp);
     }
 
@@ -64,7 +64,7 @@ public class TutorService {
     }
 
     public String deleteBySchool(Long schoolId) {
-        final School school = schoolRepo.findById(schoolId).orElse(null);
+        final School school = schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
         this.tutorRepo.deleteBySchool(school);
         return "Tutor of school: "+school.getName()+" deleted";
     }

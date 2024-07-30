@@ -42,8 +42,8 @@ public class StudentAnswerService {
 
     public String getStudentAnswerDTO(StudentAnswerDTO studentAnswerDTO) {
 
-        final Student student = this.studentRepo.findById(studentAnswerDTO.getStudentId()).orElse(null);
-        final Course course = this.courseRepo.findById(studentAnswerDTO.getCourseId()).orElse(null);
+        final Student student = this.studentRepo.findById(studentAnswerDTO.getStudentId()).orElseThrow(NullPointerException::new);
+        final Course course = this.courseRepo.findById(studentAnswerDTO.getCourseId()).orElseThrow(NullPointerException::new);
 
         final List<Long> questionIds = new ArrayList<>(studentAnswerDTO.getAnswers().keySet());
         List<Question> questions = this.questionRepo.findAllById(questionIds);
@@ -66,7 +66,7 @@ public class StudentAnswerService {
     }
 
     public StudentAnswer findById(Long studentAnswerId) {
-        return this.studentAnswerRepo.findById(studentAnswerId).orElse(null);
+        return this.studentAnswerRepo.findById(studentAnswerId).orElseThrow(NullPointerException::new);
     }
 
     public List<StudentAnswer> findAll() {
@@ -75,24 +75,24 @@ public class StudentAnswerService {
 
     public List<StudentAnswer> findByCourse(Long courseId) {
 
-        final Course course = Course.builder().id(courseId).build();
+        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
         return this.studentAnswerRepo.findByCourse(course);
     }
 
     public List<StudentAnswer> findByStudent(Long studentId) {
-        final Student student = Student.builder().id(studentId).build();
+        final Student student = this.studentRepo.findById(studentId).orElseThrow(NullPointerException::new);
         return this.studentAnswerRepo.findByStudent(student);
     }
 
     public List<StudentAnswer> findByStudentAndCourse(Long studentId, Long courseId) {
-        final Course course = Course.builder().id(courseId).build();
-        final Student student = Student.builder().id(studentId).build();
+        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
+        final Student student = this.studentRepo.findById(studentId).orElseThrow(NullPointerException::new);
         return this.studentAnswerRepo.findAllByStudentAndCourse(student, course);
     }
 
     public StudentAnswer findByStudentAndQuestion(Long studentId, Long questionId) {
-        final Student student = Student.builder().id(studentId).build();
-        final Question question = Question.builder().id(questionId).build();
+        final Student student = this.studentRepo.findById(studentId).orElseThrow(NullPointerException::new);
+        final Question question = this.questionRepo.findById(questionId).orElseThrow(NullPointerException::new);
         return this.studentAnswerRepo.findByStudentAndQuestion(student, question);
     }
 

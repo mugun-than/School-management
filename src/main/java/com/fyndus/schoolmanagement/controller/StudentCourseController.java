@@ -39,8 +39,8 @@ public class StudentCourseController {
     }
 
     @PutMapping("/{studentCourseId}")
-    public StudentCourse updateStudentCourse(@PathVariable Long studentCourseId, @RequestBody StudentCourse studentCourse) {
-        return this.studentCourseService.updateStudentCourse(studentCourseId, studentCourse);
+    public StudentCourse updateStudentCourse(@PathVariable Long studentCourseId, @RequestBody StudentCourseDTO studentCourseDTO) {
+        return this.studentCourseService.updateStudentCourse(studentCourseId, studentCourseDTO);
     }
 
     @DeleteMapping()

@@ -28,10 +28,10 @@ public class TutorCourseService {
     }
 
     public TutorCourse createTutorCourse(TutorCourseDTO tutorCourseDTO) {
-        final Tutor tutor = this.tutorRepo.findById(tutorCourseDTO.getTutorId()).orElse(null);
-        final Course course = this.courseRepo.findById(tutorCourseDTO.getCourseId()).orElse(null);
+        final Tutor tutor = this.tutorRepo.findById(tutorCourseDTO.getTutorId()).orElseThrow(NullPointerException::new);
+        final Course course = this.courseRepo.findById(tutorCourseDTO.getCourseId()).orElseThrow(NullPointerException::new);
 
-        TutorCourse tutorCourse = new TutorCourse();
+        final TutorCourse tutorCourse = new TutorCourse();
         tutorCourse.setTutor(tutor);
         tutorCourse.setCourse(course);
         tutorCourse.setCreatedAt(Instant.now());
@@ -39,7 +39,7 @@ public class TutorCourseService {
     }
 
     public TutorCourse findById(Long tutorCourseId) {
-        return this.tutorCourseRepo.findById(tutorCourseId).orElse(null);
+        return this.tutorCourseRepo.findById(tutorCourseId).orElseThrow(NullPointerException::new);
     }
 
     public List<TutorCourse> findAll() {
@@ -47,16 +47,17 @@ public class TutorCourseService {
     }
 
     public List<TutorCourse> findByCourse(Long courseId) {
-        final Course course = Course.builder().id(courseId).build();
+        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
         return this.tutorCourseRepo.findByCourse(course);
     }
 
-    public TutorCourse updateTutorCourse(Long tutorCourseId, TutorCourse tutorCourse) {
-        final TutorCourse temp = this.tutorCourseRepo.findById(tutorCourseId).orElse(null);
-        if(temp == null) return temp;
+    public TutorCourse updateTutorCourse(Long tutorCourseId, TutorCourseDTO tutorCourseDTO) {
+        final TutorCourse temp = this.tutorCourseRepo.findById(tutorCourseId).orElseThrow(NullPointerException::new);
+        final Tutor tutor = this.tutorRepo.findById(tutorCourseDTO.getTutorId()).orElseThrow(NullPointerException::new);
+        final Course course = this.courseRepo.findById(tutorCourseDTO.getCourseId()).orElseThrow(NullPointerException::new);
         temp.setUpdatedAt(Instant.now());
-        temp.setCourse(tutorCourse.getCourse());
-        temp.setTutor(tutorCourse.getTutor());
+        temp.setCourse(course);
+        temp.setTutor(tutor);
         return this.tutorCourseRepo.save(temp);
     }
 
@@ -71,13 +72,13 @@ public class TutorCourseService {
     }
 
     public String deleteByCourse(Long courseId) {
-        final Course course = this.courseRepo.findById(courseId).orElse(null);
+        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
         this.tutorCourseRepo.deleteByCourse(course);
-        return "All tutorCourse with course "+course.getName()+" daleted";
+        return "All tutorCourse with course "+course.getName()+" deleted";
     }
 
     public String deleteByTutor(Long tutorId) {
-        final Tutor tutor = this.tutorRepo.findById(tutorId).orElse(null);
+        final Tutor tutor = this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
         this.tutorCourseRepo.deleteByTutor(tutor);
         return "All tutorCourse with tutor: "+tutor.getName()+" deleted";
     }

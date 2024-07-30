@@ -1,5 +1,6 @@
 package com.fyndus.schoolmanagement.controller;
 
+import com.fyndus.schoolmanagement.DTO.MarkManagementDTO;
 import com.fyndus.schoolmanagement.entity.MarkManagement;
 import com.fyndus.schoolmanagement.service.MarkManagementService;
 import jakarta.transaction.Transactional;
@@ -18,9 +19,9 @@ public class MarkManagementController {
         this.markManagementService = markManagementService;
     }
 
-    @PostMapping("/{studentId}/{courseId}")
-    public String calculateMarkForStudentByCourse(@PathVariable Long studentId, @PathVariable Long courseId) {
-        return this.markManagementService.calculateMarkForStudent(studentId, courseId);
+    @PostMapping()
+    public String calculateMarkForStudentByCourse(@RequestBody MarkManagementDTO markManagementDTO) {
+        return this.markManagementService.calculateMarkForStudent(markManagementDTO);
     }
 
     @GetMapping()

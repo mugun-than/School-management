@@ -1,5 +1,6 @@
 package com.fyndus.schoolmanagement.controller;
 
+import com.fyndus.schoolmanagement.DTO.StudentDTO;
 import com.fyndus.schoolmanagement.entity.Student;
 import com.fyndus.schoolmanagement.repository.SchoolRepository;
 import com.fyndus.schoolmanagement.service.StudentService;
@@ -43,8 +44,8 @@ public class StudentController {
     }
 
     @PutMapping("/{studentId}")
-    public Student updateStudent(@PathVariable Long studentId, @RequestBody Student student) {
-        return this.studentService.updateStudent(studentId, student);
+    public Student updateStudent(@PathVariable Long studentId, @RequestBody StudentDTO studentDTO) {
+        return this.studentService.updateStudent(studentId, studentDTO);
     }
 
     @DeleteMapping()

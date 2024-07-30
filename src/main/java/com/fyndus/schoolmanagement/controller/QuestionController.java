@@ -1,5 +1,7 @@
 package com.fyndus.schoolmanagement.controller;
 
+import com.fyndus.schoolmanagement.DTO.QuestionDTO;
+import com.fyndus.schoolmanagement.DTO.QuestionEntryDTO;
 import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.entity.Question;
 import com.fyndus.schoolmanagement.service.QuestionService;
@@ -19,8 +21,13 @@ public class QuestionController {
     }
 
     @PostMapping()
-    public Question createQuestion(@RequestBody Question question) {
-        return this.questionService.createQuestion(question);
+    public Question createQuestion(@RequestBody QuestionEntryDTO questionEntryDTO) {
+        return this.questionService.createQuestion(questionEntryDTO);
+    }
+
+    @GetMapping("/test/course/{courseId}")
+    public List<QuestionDTO> getQuestionForTestByCourse(@PathVariable Long courseId) {
+        return this.questionService.getQuestionForTestByCourse(courseId);
     }
 
     @GetMapping()
@@ -39,8 +46,8 @@ public class QuestionController {
     }
 
     @PutMapping("/{questionId}")
-    public Question updateQuestion(@PathVariable Long questionId, @RequestBody Question question) {
-        return this.questionService.updateQuestion(questionId, question);
+    public Question updateQuestion(@PathVariable Long questionId, @RequestBody QuestionEntryDTO questionEntryDTO) {
+        return this.questionService.updateQuestion(questionId, questionEntryDTO);
     }
 
     @DeleteMapping()
