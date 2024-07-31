@@ -2,10 +2,12 @@ package com.fyndus.schoolmanagement.service;
 
 import com.fyndus.schoolmanagement.DTO.QuestionDTO;
 import com.fyndus.schoolmanagement.DTO.QuestionEntryDTO;
+import com.fyndus.schoolmanagement.DTO.ResponseDTO;
 import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.entity.Question;
 import com.fyndus.schoolmanagement.repository.CourseRepository;
 import com.fyndus.schoolmanagement.repository.QuestionRepository;
+import com.fyndus.schoolmanagement.util.ResponseMessage;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,61 +25,123 @@ public class QuestionService {
         this.courseRepo = courseRepo;
     }
 
-    public Question createQuestion(QuestionEntryDTO questionEntryDTO) {
-        final Course course = this.courseRepo.findById(questionEntryDTO.getCourseId()).orElseThrow(NullPointerException::new);
+    public ResponseDTO createQuestion(QuestionEntryDTO questionEntryDTO) {
+        final Course course;
+        try {
+            course = this.courseRepo.findById(questionEntryDTO.getCourseId()).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("Course id: "+questionEntryDTO.getCourseId()+" "+ResponseMessage.NOT_FOUND).build();
+        }
+
         final Question question = Question.builder().question(questionEntryDTO.getQuestion()).option1(questionEntryDTO.getOption1()).option2(questionEntryDTO.getOption2()).ans(questionEntryDTO.getAns()).course(course).createdAt(Instant.now()).build();
-        return this.questionRepo.save(question);
+        return ResponseDTO.builder().data(this.questionRepo.save(question)).message(ResponseMessage.CREATED).build();
     }
 
-    public List<Question> findByCourse(Long courseId) {
-        final Course course = courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
-        return this.questionRepo.findAllByCourse(course);
+    public ResponseDTO findByCourse(Long courseId) {
+        final Course course;
+        try {
+            course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("Course id: "+courseId+" "+ResponseMessage.NOT_FOUND).build();
+        }
+        final List<Question> questions = this.questionRepo.findAllByCourse(course);
+        if(questions.isEmpty()) {
+            return ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
+        return ResponseDTO.builder().data(questions).message(ResponseMessage.FOUND).build();
     }
 
-    public List<Question> findAll() {
-        return this.questionRepo.findAll();
+    public ResponseDTO findAll() {
+        final List<Question> questions = this.questionRepo.findAll();
+        if(questions.isEmpty()) {
+            return ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
+        return ResponseDTO.builder().data(questions).message(ResponseMessage.FOUND).build();
     }
 
-    public Question findById(Long questionId) {
-        return this.questionRepo.findById(questionId).orElseThrow(NullPointerException::new);
+    public ResponseDTO findById(Long questionId) {
+        final Question question;
+        try {
+            question = this.questionRepo.findById(questionId).orElseThrow(NullPointerException::new);
+        } catch(NullPointerException e) {
+            return ResponseDTO.builder().message(ResponseMessage.NOT_FOUND).build();
+        }
+        return ResponseDTO.builder().data(question).message(ResponseMessage.FOUND).build();
     }
 
-    public List<QuestionDTO> getQuestionForTestByCourse(Long courseId) {
-        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
+    public ResponseDTO getQuestionForTestByCourse(Long courseId) {
+        final Course course;
+        try {
+            course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e){
+            return ResponseDTO.builder().message("Course: "+courseId+" "+ResponseMessage.NOT_FOUND).build();
+        }
         final List<Question> result = this.questionRepo.findAllByCourse(course);
+        if(result.isEmpty()) {
+            return ResponseDTO.builder().message("Course: "+courseId+" "+ResponseMessage.EMPTY).build();
+        }
         final List<QuestionDTO> questionDTOList = new ArrayList<>();
         for(Question question : result) {
             QuestionDTO questionDTO = QuestionDTO.builder().question(question.getQuestion()).option1(question.getOption1()).option2(question.getOption2()).id(question.getId()).build();
             questionDTOList.add(questionDTO);
         }
-        return questionDTOList;
+        return ResponseDTO.builder().data(questionDTOList).message(ResponseMessage.FOUND).build();
     }
 
-    public Question updateQuestion(Long questionId, QuestionEntryDTO questionEntryDTO) {
-        final Question temp = this.questionRepo.findById(questionId).orElseThrow(NullPointerException::new);
-        final Course course = this.courseRepo.findById(questionEntryDTO.getCourseId()).orElseThrow(NullPointerException::new);
+    public ResponseDTO updateQuestion(Long questionId, QuestionEntryDTO questionEntryDTO) {
+        final Course course;
+        try {
+            course = this.courseRepo.findById(questionEntryDTO.getCourseId()).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("Course id: "+questionEntryDTO.getCourseId()+" "+ResponseMessage.NOT_FOUND).build();
+        }
+        final Question temp;
+        try {
+            temp = this.questionRepo.findById(questionId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("Question id: "+questionId+" "+ResponseMessage.NOT_FOUND).build();
+        }
         temp.setUpdatedAt(Instant.now());
         temp.setQuestion(questionEntryDTO.getQuestion());
         temp.setAns(questionEntryDTO.getAns());
         temp.setCourse(course);
         temp.setOption1(questionEntryDTO.getOption1());
         temp.setOption2(questionEntryDTO.getOption2());
-        return this.questionRepo.save(temp);
+        return ResponseDTO.builder().data(this.questionRepo.save(temp)).message(ResponseMessage.UPDATED).build();
     }
 
-    public String deleteAll() {
+    public ResponseDTO deleteAll() {
+        final List<Question> questions = this.questionRepo.findAll();
+        if(questions.isEmpty()) {
+            return  ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
         this.questionRepo.deleteAll();
-        return "All question deleted";
+        return ResponseDTO.builder().data(questions).message(ResponseMessage.DELETED).build();
     }
 
-    public String deleteById(Long questionId) {
+    public ResponseDTO deleteById(Long questionId) {
+        final Question question;
+        try {
+            question = this.questionRepo.findById(questionId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("Question id : "+questionId+" "+ResponseMessage.NOT_FOUND).build();
+        }
         this.questionRepo.deleteById(questionId);
-        return "Question with id: "+questionId+" deleted";
+        return ResponseDTO.builder().data(question).message(ResponseMessage.DELETED).build();
     }
 
-    public String deleteByCourse(Long courseId) {
-        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
-        this.questionRepo.deleteByCourse(course);
-        return "Question of course: "+course.getName()+" deleted";
+    public ResponseDTO deleteByCourse(Long courseId) {
+        final Course course;
+        try {
+            course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("Course id: "+courseId+" "+ResponseMessage.NOT_FOUND).build();
+        }
+        final List<Question> questions = this.questionRepo.findAllByCourse(course);
+        if(questions.isEmpty()) {
+            return ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
+        this.questionRepo.deleteAllByCourse(course);
+        return ResponseDTO.builder().data(questions).message(ResponseMessage.DELETED).build();
     }
 }

@@ -9,9 +9,8 @@ import java.util.List;
 
 @Repository
 public interface TutorRepository extends JpaRepository<Tutor, Long> {
-    List<Tutor> findBySchool(School school);
 
-    void deleteBySchool(School school);
+    List<Tutor> findAllBySchool(School school);
 
-    School findByName(String schoolName);
+    void deleteAllBySchool(School school);
 }

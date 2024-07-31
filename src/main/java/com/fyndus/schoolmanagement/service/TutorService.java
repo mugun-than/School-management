@@ -1,10 +1,12 @@
 package com.fyndus.schoolmanagement.service;
 
+import com.fyndus.schoolmanagement.DTO.ResponseDTO;
 import com.fyndus.schoolmanagement.DTO.TutorDTO;
 import com.fyndus.schoolmanagement.entity.School;
 import com.fyndus.schoolmanagement.entity.Tutor;
 import com.fyndus.schoolmanagement.repository.SchoolRepository;
 import com.fyndus.schoolmanagement.repository.TutorRepository;
+import com.fyndus.schoolmanagement.util.ResponseMessage;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -21,52 +23,107 @@ public class TutorService {
         this.tutorRepo = tutorRepo;
     }
 
-    public Tutor createTutor(TutorDTO tutorDTO) {
+    public ResponseDTO createTutor(TutorDTO tutorDTO) {
+        final School school;
+        try {
+           school = this.schoolRepo.findById(tutorDTO.getSchoolId()).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("School id: "+tutorDTO.getSchoolId()+" "+ ResponseMessage.NOT_FOUND).build();
+        }
+
         final Tutor tutor = new Tutor();
         tutor.setName(tutorDTO.getTutorName());
         tutor.setAddress(tutorDTO.getAddress());
-        tutor.setSchool(schoolRepo.findById(tutorDTO.getSchoolId()).orElseThrow(NullPointerException::new));
+        tutor.setSchool(school);
         tutor.setCreatedAt(Instant.now());
-        return this.tutorRepo.save(tutor);
+        return ResponseDTO.builder().data(this.tutorRepo.save(tutor)).message(ResponseMessage.CREATED).build();
     }
 
-    public Tutor findById(Long tutorId) {
-        return this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
+    public ResponseDTO findById(Long tutorId) {
+        final Tutor tutor;
+        try {
+            tutor = this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
+        }catch (NullPointerException e) {
+            return ResponseDTO.builder().message("Tutor id: "+tutorId+" "+ResponseMessage.NOT_FOUND).build();
+        }
+        return ResponseDTO.builder().data(tutor).message(ResponseMessage.FOUND).build();
     }
 
-    public List<Tutor> findBySchool(Long schoolId) {
-        final School school = this.schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
-        return this.tutorRepo.findBySchool(school);
+    public ResponseDTO findBySchool(Long schoolId) {
+        final School school;
+        try {
+            school = this.schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("School id: "+schoolId+" "+ResponseMessage.NOT_FOUND).build();
+        }
+        final List<Tutor> tutors = this.tutorRepo.findAllBySchool(school);
+        if(tutors.isEmpty()) {
+            return ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
+        return ResponseDTO.builder().data(tutors).message(ResponseMessage.FOUND).build();
     }
 
-    public List<Tutor> findAll() {
-        return this.tutorRepo.findAll();
+    public ResponseDTO findAll() {
+        final List<Tutor> tutors = this.tutorRepo.findAll();
+        if(tutors.isEmpty()) {
+            return ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
+        return ResponseDTO.builder().data(tutors).message(ResponseMessage.FOUND).build();
     }
 
-    public Tutor updateTutor(Long tutorId, TutorDTO tutorDTO) {
-        final Tutor temp = this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
-        final School school = this.schoolRepo.findById(tutorDTO.getSchoolId()).orElseThrow(NullPointerException::new);
+    public ResponseDTO updateTutor(Long tutorId, TutorDTO tutorDTO) {
+        final School school;
+        try {
+            school = this.schoolRepo.findById(tutorDTO.getSchoolId()).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("School id: " + tutorDTO.getSchoolId() + " " + ResponseMessage.NOT_FOUND).build();
+        }
+        final Tutor temp;
+        try {
+            temp = this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message(ResponseMessage.NOT_FOUND).build();
+        }
         temp.setUpdatedAt(Instant.now());
         temp.setAddress(tutorDTO.getAddress());
         temp.setName(tutorDTO.getTutorName());
         temp.setSchool(school);
-        return this.tutorRepo.save(temp);
+        return ResponseDTO.builder().data(this.tutorRepo.save(temp)).message(ResponseMessage.UPDATED).build();
     }
 
-    public String deleteAll() {
+    public ResponseDTO deleteAll() {
+        final List<Tutor> tutors = this.tutorRepo.findAll();
+        if(tutors.isEmpty()) {
+            return ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
         this.tutorRepo.deleteAll();
-        return "All tutor deleted";
+        return ResponseDTO.builder().data(tutors).message(ResponseMessage.DELETED).build();
     }
 
-    public String deleteById(Long tutorId) {
+    public ResponseDTO deleteById(Long tutorId) {
+        final Tutor tutor;
+        try {
+            tutor = this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
+        }catch (NullPointerException e) {
+            return ResponseDTO.builder().message("Tutor id: "+tutorId+" "+ResponseMessage.NOT_FOUND).build();
+        }
         this.tutorRepo.deleteById(tutorId);
-        return "Tutor with id: "+tutorId+" deleted";
+        return ResponseDTO.builder().data(tutor).message(ResponseMessage.DELETED).build();
     }
 
-    public String deleteBySchool(Long schoolId) {
-        final School school = schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
-        this.tutorRepo.deleteBySchool(school);
-        return "Tutor of school: "+school.getName()+" deleted";
+    public ResponseDTO deleteBySchool(Long schoolId) {
+        final School school;
+        try {
+            school = this.schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
+        }catch(NullPointerException e) {
+            return ResponseDTO.builder().message("School id: "+schoolId+" "+ ResponseMessage.NOT_FOUND).build();
+        }
+        final List<Tutor> tutors = this.tutorRepo.findAllBySchool(school);
+        if(tutors.isEmpty()) {
+            return ResponseDTO.builder().message(ResponseMessage.EMPTY).build();
+        }
+        this.tutorRepo.deleteAllBySchool(school);
+        return ResponseDTO.builder().data(tutors).message(ResponseMessage.DELETED).build();
     }
 }
 

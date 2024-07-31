@@ -13,4 +13,6 @@ public interface SchoolCourseRepository extends JpaRepository<SchoolCourse, Long
     List<SchoolCourse> findBySchool(School school);
 
     void deleteBySchool(School school);
+
+    List<SchoolCourse> findAllBySchool(School school);
 }

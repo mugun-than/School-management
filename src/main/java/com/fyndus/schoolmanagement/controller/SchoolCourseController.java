@@ -1,5 +1,6 @@
 package com.fyndus.schoolmanagement.controller;
 
+import com.fyndus.schoolmanagement.DTO.ResponseDTO;
 import com.fyndus.schoolmanagement.DTO.SchoolCourseDTO;
 import com.fyndus.schoolmanagement.entity.SchoolCourse;
 import com.fyndus.schoolmanagement.service.SchoolCourseService;
@@ -20,43 +21,43 @@ public class SchoolCourseController {
     }
 
     @PostMapping()
-    public SchoolCourse createSchoolCourse(@RequestBody SchoolCourseDTO schoolCourseDTO) {
+    public ResponseDTO createSchoolCourse(@RequestBody SchoolCourseDTO schoolCourseDTO) {
         return this.schoolCourseService.createSchoolCourseByDTO(schoolCourseDTO);
     }
 
     @GetMapping()
-    public List<SchoolCourse> findAll() {
+    public ResponseDTO findAll() {
         return this.schoolCourseService.findAll();
     }
 
     @GetMapping("/{schoolCourseId}")
-    public SchoolCourse findById(@PathVariable Long schoolCourseId) {
+    public ResponseDTO findById(@PathVariable Long schoolCourseId) {
         return this.schoolCourseService.findById(schoolCourseId);
     }
 
     @GetMapping("/school/{schoolId}")
-    public List<SchoolCourse> findBySchool(@PathVariable Long schoolId) {
+    public ResponseDTO findBySchool(@PathVariable Long schoolId) {
         return this.schoolCourseService.findBySchool(schoolId);
     }
 
     @PutMapping("/{schoolCourseId}")
-    public SchoolCourse updateSchoolCourse(@PathVariable Long schoolCourseId, @RequestBody SchoolCourseDTO schoolCourseDTO) {
+    public ResponseDTO updateSchoolCourse(@PathVariable Long schoolCourseId, @RequestBody SchoolCourseDTO schoolCourseDTO) {
         return this.schoolCourseService.updateSchoolCourse(schoolCourseId, schoolCourseDTO);
     }
 
     @DeleteMapping()
-    public String deleteAll() {
+    public ResponseDTO deleteAll() {
         return this.schoolCourseService.deleteAll();
     }
 
     @DeleteMapping("/{schoolCourseId}")
-    public String deleteById(@PathVariable Long schoolCourseId) {
+    public ResponseDTO deleteById(@PathVariable Long schoolCourseId) {
         return this.schoolCourseService.deleteById(schoolCourseId);
     }
 
     @Transactional
     @DeleteMapping("/school/{schoolId}")
-    public String deleteBySchool(@PathVariable Long schoolId) {
+    public ResponseDTO deleteBySchool(@PathVariable Long schoolId) {
         return this.schoolCourseService.deleteBySchool(schoolId);
     }
 }

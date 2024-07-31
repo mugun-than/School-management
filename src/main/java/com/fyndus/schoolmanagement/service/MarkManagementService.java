@@ -39,7 +39,6 @@ public class MarkManagementService {
         MarkManagement markManagement = this.markManagementRepo.findByStudentAndCourse(student, course);
         if(markManagement != null) return "Student: "+markManagement.getStudent().getName()+" has scored a mark: "+markManagement.getMark();
 
-        System.out.println("Entered past the if statement: !!!!!!!!!!!!!!!!!!!!");
         final List<StudentAnswer> studentAnswers = this.studentAnswerRepo.findAllByStudentAndCourse(student, course);
         int mark = 0;
         for(StudentAnswer answer : studentAnswers) {
@@ -51,7 +50,6 @@ public class MarkManagementService {
         markManagement.setCourse(course);
         this.createMarkEntry(markManagement);
 
-        assert student != null;
         return "Student: "+student.getName()+" has scored a mark: "+mark+" in course: "+course.getName();
     }
 

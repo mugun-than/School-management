@@ -2,6 +2,7 @@ package com.fyndus.schoolmanagement.controller;
 
 import com.fyndus.schoolmanagement.DTO.QuestionDTO;
 import com.fyndus.schoolmanagement.DTO.QuestionEntryDTO;
+import com.fyndus.schoolmanagement.DTO.ResponseDTO;
 import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.entity.Question;
 import com.fyndus.schoolmanagement.service.QuestionService;
@@ -21,48 +22,48 @@ public class QuestionController {
     }
 
     @PostMapping()
-    public Question createQuestion(@RequestBody QuestionEntryDTO questionEntryDTO) {
+    public ResponseDTO createQuestion(@RequestBody QuestionEntryDTO questionEntryDTO) {
         return this.questionService.createQuestion(questionEntryDTO);
     }
 
     @GetMapping("/test/course/{courseId}")
-    public List<QuestionDTO> getQuestionForTestByCourse(@PathVariable Long courseId) {
+    public ResponseDTO getQuestionForTestByCourse(@PathVariable Long courseId) {
         return this.questionService.getQuestionForTestByCourse(courseId);
     }
 
     @GetMapping()
-    public List<Question> findAll() {
+    public ResponseDTO findAll() {
         return this.questionService.findAll();
     }
 
     @GetMapping("/{questionId}")
-    public Question findById(@PathVariable Long questionId) {
+    public ResponseDTO findById(@PathVariable Long questionId) {
         return this.questionService.findById(questionId);
     }
 
     @GetMapping("/course/{courseId}")
-    public List<Question> findByCourse(@PathVariable Long courseId) {
+    public ResponseDTO findByCourse(@PathVariable Long courseId) {
         return this.questionService.findByCourse(courseId);
     }
 
     @PutMapping("/{questionId}")
-    public Question updateQuestion(@PathVariable Long questionId, @RequestBody QuestionEntryDTO questionEntryDTO) {
+    public ResponseDTO updateQuestion(@PathVariable Long questionId, @RequestBody QuestionEntryDTO questionEntryDTO) {
         return this.questionService.updateQuestion(questionId, questionEntryDTO);
     }
 
     @DeleteMapping()
-    public String deleteAll() {
+    public ResponseDTO deleteAll() {
         return this.questionService.deleteAll();
     }
 
     @DeleteMapping("/{questionId}")
-    public String deleteById(@PathVariable Long questionId) {
+    public ResponseDTO deleteById(@PathVariable Long questionId) {
         return this.questionService.deleteById(questionId);
     }
 
     @Transactional
     @DeleteMapping("/course/{courseId}")
-    public String deleteByCourse(@PathVariable Long courseId) {
+    public ResponseDTO deleteByCourse(@PathVariable Long courseId) {
         return this.questionService.deleteByCourse(courseId);
     }
 }

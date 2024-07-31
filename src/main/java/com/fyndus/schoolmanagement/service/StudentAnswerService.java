@@ -41,7 +41,6 @@ public class StudentAnswerService {
     }
 
     public String getStudentAnswerDTO(StudentAnswerDTO studentAnswerDTO) {
-
         final Student student = this.studentRepo.findById(studentAnswerDTO.getStudentId()).orElseThrow(NullPointerException::new);
         final Course course = this.courseRepo.findById(studentAnswerDTO.getCourseId()).orElseThrow(NullPointerException::new);
 

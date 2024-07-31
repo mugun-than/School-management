@@ -11,5 +11,7 @@ import java.util.List;
 public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findBySchool(School school);
 
-    void deleteBySchool(School school);
+    List<Student> findAllBySchool(School school);
+
+    void deleteAllBySchool(School school);
 }
