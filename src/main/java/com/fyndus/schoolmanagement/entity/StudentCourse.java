@@ -21,7 +21,7 @@ public class StudentCourse {
     @ManyToOne
     private Student student;
     @ManyToOne
-    private TutorCourse tutorCourse;
+    private Tutor tutor;
     private Instant createdAt;
     private Instant updatedAt;
 }

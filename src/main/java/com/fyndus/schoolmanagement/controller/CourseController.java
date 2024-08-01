@@ -3,6 +3,8 @@ package com.fyndus.schoolmanagement.controller;
 import com.fyndus.schoolmanagement.DTO.ResponseDTO;
 import com.fyndus.schoolmanagement.entity.Course;
 import com.fyndus.schoolmanagement.service.CourseService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,32 +20,32 @@ public class CourseController {
     }
 
     @PostMapping()
-    public ResponseDTO createCourse(@RequestBody Course course) {
-        return this.courseService.createCourse(course);
+    public ResponseEntity<ResponseDTO> createCourse(@RequestBody Course course) {
+        return new ResponseEntity<>(this.courseService.createCourse(course), HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseDTO findAll() {
-        return this.courseService.findAll();
+    public ResponseEntity<ResponseDTO> findAll() {
+        return new ResponseEntity<>(this.courseService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{courseId}")
-    public ResponseDTO findById(@PathVariable Long courseId) {
-        return this.courseService.findById(courseId);
+    public ResponseEntity<ResponseDTO> findById(@PathVariable Long courseId) {
+        return new ResponseEntity<>(this.courseService.findById(courseId), HttpStatus.OK);
     }
 
     @PutMapping("/{courseId}")
-    public ResponseDTO updateCourse(@PathVariable Long courseId, @RequestBody Course course) {
-        return this.courseService.updateCourse(courseId, course);
+    public ResponseEntity<ResponseDTO> updateCourse(@PathVariable Long courseId, @RequestBody Course course) {
+        return new ResponseEntity<>(this.courseService.updateCourse(courseId, course), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public ResponseDTO deleteAll(){
-        return this.courseService.deleteAll();
+    public ResponseEntity<ResponseDTO> deleteAll(){
+        return new ResponseEntity<>(this.courseService.deleteAll(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{courseId}")
-    public ResponseDTO deleteById(@PathVariable Long courseId) {
-        return this.courseService.deleteById(courseId);
+    public ResponseEntity<ResponseDTO> deleteById(@PathVariable Long courseId) {
+        return new ResponseEntity<>(this.courseService.deleteById(courseId), HttpStatus.OK);
     }
 }
