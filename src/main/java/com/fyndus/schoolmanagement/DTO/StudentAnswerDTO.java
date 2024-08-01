@@ -7,6 +7,5 @@ import java.util.Map;
 public class StudentAnswerDTO {
 
     private Long studentId;
-    private Long courseId;
     private Map<Long, Long> answers;
 }

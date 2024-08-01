@@ -53,10 +53,7 @@ public class SchoolCourseService {
 
     public ResponseDTO findBySchool(Long schoolId) {
         final School school = this.schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
-        final List<SchoolCourse> schoolCourses = this.schoolCourseRepo.findBySchool(school);
-        if(schoolCourses.isEmpty()) {
-            throw new NoSuchElementFoundException();
-        }
+        final List<SchoolCourse> schoolCourses = this.schoolCourseRepo.findAllBySchool(school).orElseThrow(NoSuchElementFoundException::new);
         return ResponseDTO.builder().data(schoolCourses).message(ResponseMessage.FOUND).build();
     }
 
@@ -101,10 +98,7 @@ public class SchoolCourseService {
 
     public ResponseDTO deleteBySchool(Long schoolId) {
         final School school = schoolRepo.findById(schoolId).orElseThrow(NullPointerException::new);
-        final List<SchoolCourse> schoolCourses = this.schoolCourseRepo.findAllBySchool(school);
-        if(schoolCourses.isEmpty()) {
-            throw new NoSuchElementFoundException();
-        }
+        final List<SchoolCourse> schoolCourses = this.schoolCourseRepo.findAllBySchool(school).orElseThrow(NoSuchElementFoundException::new);
         this.schoolCourseRepo.deleteBySchool(school);
         return ResponseDTO.builder().data(schoolCourses).message(ResponseMessage.DELETED).build();
     }

@@ -1,27 +1,26 @@
 package com.fyndus.schoolmanagement.repository;
 
-import com.fyndus.schoolmanagement.entity.Course;
-import com.fyndus.schoolmanagement.entity.Question;
-import com.fyndus.schoolmanagement.entity.Student;
-import com.fyndus.schoolmanagement.entity.StudentAnswer;
+import com.fyndus.schoolmanagement.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentAnswerRepository extends JpaRepository<StudentAnswer, Long> {
-    List<StudentAnswer> findByCourse(Course course);
 
-    List<StudentAnswer> findByStudent(Student student);
+    Optional<List<StudentAnswer>> findAllByStudent(Student student);
 
-    List<StudentAnswer> findAllByStudentAndCourse(Student student, Course course);
+    Optional<List<StudentAnswer>> findAllByQuestion_SchoolCourse(SchoolCourse schoolCourse);
 
-    StudentAnswer findByStudentAndQuestion(Student student, Question question);
+    Optional<StudentAnswer> findByStudentAndQuestion(Student student, Question question);
 
-    void deleteByStudent(Student student);
+    void deleteAllByStudent(Student student);
 
-    void deleteByCourse(Course course);
+    void deleteAllByQuestion_SchoolCourse(SchoolCourse schoolCourse);
 
-    void deleteByStudentAndCourse(Student student, Course course);
+    void deleteAllByStudentAndQuestion_SchoolCourse(Student student, SchoolCourse schoolCourse);
+
+    Optional<List<StudentAnswer>> findAllByStudentAndQuestion_SchoolCourse(Student student, SchoolCourse schoolCourse);
 }

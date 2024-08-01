@@ -22,7 +22,7 @@ public class Student {
     private String name;
     private String address;
     @ManyToOne
-    private Tutor tutor;
+    private School school;
     private Instant createdAt;
     private Instant updatedAt;
 }

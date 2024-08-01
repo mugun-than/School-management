@@ -6,5 +6,6 @@ import lombok.Data;
 public class StudentCourseDTO {
 
     private Long studentId;
-    private Long tutorCourseId;
+    private Long tutorId;
+    private Long schoolCourseId;
 }

@@ -28,7 +28,7 @@ public class Tutor {
     private String address;
     private String name;
     @ManyToOne
-    private SchoolCourse schoolCourse;
+    private School school;
     private Instant createdAt;
     private Instant updatedAt;
 }

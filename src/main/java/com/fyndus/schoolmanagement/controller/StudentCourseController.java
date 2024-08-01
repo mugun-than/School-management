@@ -1,9 +1,12 @@
 package com.fyndus.schoolmanagement.controller;
 
+import com.fyndus.schoolmanagement.DTO.ResponseDTO;
 import com.fyndus.schoolmanagement.DTO.StudentCourseDTO;
 import com.fyndus.schoolmanagement.entity.StudentCourse;
 import com.fyndus.schoolmanagement.service.StudentCourseService;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,42 +22,42 @@ public class StudentCourseController {
     }
 
     @PostMapping()
-    public StudentCourse createStudentCourse(@RequestBody StudentCourseDTO studentCourseDTO) {
-        return this.studentCourseService.createStudentCourse(studentCourseDTO);
+    public ResponseEntity<ResponseDTO> createStudentCourse(@RequestBody StudentCourseDTO studentCourseDTO) {
+        return new ResponseEntity<>(this.studentCourseService.createStudentCourse(studentCourseDTO), HttpStatus.OK);
     }
 
     @GetMapping()
-    public List<StudentCourse> findAll() {
-        return this.studentCourseService.findAll();
+    public ResponseEntity<ResponseDTO> findAll() {
+        return new ResponseEntity<>(this.studentCourseService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{studentCourseId}")
-    public StudentCourse findById(@PathVariable Long studentCourseId) {
-        return this.studentCourseService.findById(studentCourseId);
+    public ResponseEntity<ResponseDTO> findById(@PathVariable Long studentCourseId) {
+        return new ResponseEntity<>(this.studentCourseService.findById(studentCourseId), HttpStatus.OK);
     }
 
     @GetMapping("/student/{studentId}")
-    public List<StudentCourse> findByStudent(@PathVariable Long studentId) {
-        return this.studentCourseService.findByStudent(studentId);
+    public ResponseEntity<ResponseDTO> findByStudent(@PathVariable Long studentId) {
+        return new ResponseEntity<>(this.studentCourseService.findByStudent(studentId), HttpStatus.OK);
     }
 
     @PutMapping("/{studentCourseId}")
-    public StudentCourse updateStudentCourse(@PathVariable Long studentCourseId, @RequestBody StudentCourseDTO studentCourseDTO) {
-        return this.studentCourseService.updateStudentCourse(studentCourseId, studentCourseDTO);
+    public ResponseEntity<ResponseDTO> updateStudentCourse(@PathVariable Long studentCourseId, @RequestBody StudentCourseDTO studentCourseDTO) {
+        return new ResponseEntity<>(this.studentCourseService.updateStudentCourse(studentCourseId, studentCourseDTO), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public String deleteAll() {
-        return this.studentCourseService.deleteAll();
+    public ResponseEntity<ResponseDTO> deleteAll() {
+        return new ResponseEntity<>(this.studentCourseService.deleteAll(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{studentCourseId}")
-    public String deleteById(@PathVariable Long studentCourseId) {
-        return this.studentCourseService.deleteById(studentCourseId);
+    public ResponseEntity<ResponseDTO> deleteById(@PathVariable Long studentCourseId) {
+        return new ResponseEntity<>(this.studentCourseService.deleteById(studentCourseId), HttpStatus.OK);
     }
 
     @DeleteMapping("/student/{studentId}")
-    public String deleteByStudent(@PathVariable Long studentId) {
-        return this.studentCourseService.deleteByStudent(studentId);
+    public ResponseEntity<ResponseDTO> deleteByStudent(@PathVariable Long studentId) {
+        return new ResponseEntity<>(this.studentCourseService.deleteByStudent(studentId), HttpStatus.OK);
     }
 }

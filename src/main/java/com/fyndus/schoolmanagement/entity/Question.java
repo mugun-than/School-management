@@ -30,7 +30,7 @@ public class Question {
     private String option2;
     private Long ans;
     @ManyToOne
-    private Course course;
+    private SchoolCourse schoolCourse;
     private Instant createdAt;
     private Instant updatedAt;
 }

@@ -5,6 +5,9 @@ import com.fyndus.schoolmanagement.DTO.TutorDTO;
 import com.fyndus.schoolmanagement.entity.Tutor;
 import com.fyndus.schoolmanagement.service.TutorService;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,43 +23,43 @@ public class TutorController {
     }
 
     @PostMapping()
-    public ResponseDTO createTutor(@RequestBody TutorDTO tutorDTO) {
-        return this.tutorService.createTutor(tutorDTO);
+    public ResponseEntity<ResponseDTO> createTutor(@RequestBody TutorDTO tutorDTO) {
+        return new ResponseEntity<>(this.tutorService.createTutor(tutorDTO), HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseDTO findAll() {
-        return this.tutorService.findAll();
+    public ResponseEntity<ResponseDTO> findAll() {
+        return new ResponseEntity<>(this.tutorService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{tutorId}")
-    public ResponseDTO findById(@PathVariable Long tutorId) {
-        return this.tutorService.findById(tutorId);
+    public ResponseEntity<ResponseDTO> findById(@PathVariable Long tutorId) {
+        return new ResponseEntity<>(this.tutorService.findById(tutorId), HttpStatus.OK);
     }
 
     @GetMapping("/school/{schoolId}")
-    public ResponseDTO findBySchool(@PathVariable Long schoolId) {
-        return this.tutorService.findBySchool(schoolId);
+    public ResponseEntity<ResponseDTO> findBySchool(@PathVariable Long schoolId) {
+        return new ResponseEntity<>(this.tutorService.findBySchool(schoolId), HttpStatus.OK);
     }
 
     @PutMapping("/{tutorId}")
-    public ResponseDTO updateTutor(@PathVariable Long tutorId, @RequestBody TutorDTO tutorDTO) {
-        return this.tutorService.updateTutor(tutorId, tutorDTO);
+    public ResponseEntity<ResponseDTO> updateTutor(@PathVariable Long tutorId, @RequestBody TutorDTO tutorDTO) {
+        return new ResponseEntity<>(this.tutorService.updateTutor(tutorId, tutorDTO), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public ResponseDTO deleteAll() {
-        return this.tutorService.deleteAll();
+    public ResponseEntity<ResponseDTO> deleteAll() {
+        return new ResponseEntity<>(this.tutorService.deleteAll(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{tutorId}")
-    public ResponseDTO deleteById(@PathVariable Long tutorId) {
-        return this.tutorService.deleteById(tutorId);
+    public ResponseEntity<ResponseDTO> deleteById(@PathVariable Long tutorId) {
+        return new ResponseEntity<>(this.tutorService.deleteById(tutorId), HttpStatus.OK);
     }
 
     @Transactional
     @DeleteMapping("/school/{schoolId}")
-    public ResponseDTO deleteBySchool(@PathVariable Long schoolId) {
-        return this.tutorService.deleteBySchool(schoolId);
+    public ResponseEntity<ResponseDTO> deleteBySchool(@PathVariable Long schoolId) {
+        return new ResponseEntity<>(this.tutorService.deleteBySchool(schoolId), HttpStatus.OK);
     }
 }

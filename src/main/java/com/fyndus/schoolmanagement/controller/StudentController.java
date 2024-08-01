@@ -7,6 +7,8 @@ import com.fyndus.schoolmanagement.repository.SchoolRepository;
 import com.fyndus.schoolmanagement.service.StudentService;
 import jakarta.transaction.Transactional;
 import jdk.dynalink.linker.LinkerServices;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,43 +26,43 @@ public class StudentController {
     }
 
     @PostMapping()
-    public ResponseDTO createStudent(@RequestBody StudentDTO studentDTO) {
-        return this.studentService.createStudent(studentDTO);
+    public ResponseEntity<ResponseDTO> createStudent(@RequestBody StudentDTO studentDTO) {
+        return new ResponseEntity<>(this.studentService.createStudent(studentDTO), HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseDTO findAll() {
-        return this.studentService.findAll();
+    public ResponseEntity<ResponseDTO> findAll() {
+        return new ResponseEntity<>(this.studentService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{studentId}")
-    public ResponseDTO findById(@PathVariable Long studentId) {
-        return this.studentService.findById(studentId);
+    public ResponseEntity<ResponseDTO> findById(@PathVariable Long studentId) {
+        return new ResponseEntity<>(this.studentService.findById(studentId), HttpStatus.OK);
     }
 
     @GetMapping("/school/{schoolId}")
-    public ResponseDTO findBySchool(@PathVariable Long schoolId) {
-        return this.studentService.findBySchool(schoolId);
+    public ResponseEntity<ResponseDTO> findBySchool(@PathVariable Long schoolId) {
+        return new ResponseEntity<>(this.studentService.findBySchool(schoolId), HttpStatus.OK);
     }
 
     @PutMapping("/{studentId}")
-    public ResponseDTO updateStudent(@PathVariable Long studentId, @RequestBody StudentDTO studentDTO) {
-        return this.studentService.updateStudent(studentId, studentDTO);
+    public ResponseEntity<ResponseDTO> updateStudent(@PathVariable Long studentId, @RequestBody StudentDTO studentDTO) {
+        return new ResponseEntity<>(this.studentService.updateStudent(studentId, studentDTO), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public ResponseDTO deleteAll() {
-        return this.studentService.deleteAll();
+    public ResponseEntity<ResponseDTO> deleteAll() {
+        return new ResponseEntity<>(this.studentService.deleteAll(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{studentId}")
-    public ResponseDTO deleteById(@PathVariable Long studentId) {
-        return this.studentService.deleteById(studentId);
+    public ResponseEntity<ResponseDTO> deleteById(@PathVariable Long studentId) {
+        return new ResponseEntity<>(this.studentService.deleteById(studentId), HttpStatus.OK);
     }
 
     @Transactional
     @DeleteMapping("/school/{schoolId}")
-    public ResponseDTO deleteBySchool(@PathVariable Long schoolId) {
-        return this.studentService.deleteBySchool(schoolId);
+    public ResponseEntity<ResponseDTO> deleteBySchool(@PathVariable Long schoolId) {
+        return new ResponseEntity<>(this.studentService.deleteBySchool(schoolId), HttpStatus.OK);
     }
 }

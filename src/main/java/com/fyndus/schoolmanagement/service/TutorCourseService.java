@@ -1,13 +1,15 @@
 package com.fyndus.schoolmanagement.service;
 
+import com.fyndus.schoolmanagement.DTO.ResponseDTO;
 import com.fyndus.schoolmanagement.DTO.TutorCourseDTO;
-import com.fyndus.schoolmanagement.entity.Course;
-import com.fyndus.schoolmanagement.entity.School;
-import com.fyndus.schoolmanagement.entity.Tutor;
-import com.fyndus.schoolmanagement.entity.TutorCourse;
+import com.fyndus.schoolmanagement.entity.*;
+import com.fyndus.schoolmanagement.exceptions.NoSuchElementFoundException;
+import com.fyndus.schoolmanagement.exceptions.NullPointerException;
 import com.fyndus.schoolmanagement.repository.CourseRepository;
+import com.fyndus.schoolmanagement.repository.SchoolCourseRepository;
 import com.fyndus.schoolmanagement.repository.TutorCourseRepository;
 import com.fyndus.schoolmanagement.repository.TutorRepository;
+import com.fyndus.schoolmanagement.util.ResponseMessage;
 import org.hibernate.query.derived.AnonymousTupleTableGroupProducer;
 import org.springframework.stereotype.Service;
 
@@ -19,67 +21,107 @@ public class TutorCourseService {
 
     private final TutorCourseRepository tutorCourseRepo;
     private final TutorRepository tutorRepo;
-    private final CourseRepository courseRepo;
+    private final SchoolCourseRepository schoolCourseRepo;
 
-    public TutorCourseService(TutorCourseRepository tutorCourseRepo, CourseRepository courseRepo, TutorRepository tutorRepo) {
+    public TutorCourseService(TutorCourseRepository tutorCourseRepo, SchoolCourseRepository schoolCourseRepo, TutorRepository tutorRepo) {
         this.tutorRepo = tutorRepo;
-        this.courseRepo = courseRepo;
         this.tutorCourseRepo = tutorCourseRepo;
+        this.schoolCourseRepo = schoolCourseRepo;
     }
 
-    public TutorCourse createTutorCourse(TutorCourseDTO tutorCourseDTO) {
+    public ResponseDTO createTutorCourse(TutorCourseDTO tutorCourseDTO) {
         final Tutor tutor = this.tutorRepo.findById(tutorCourseDTO.getTutorId()).orElseThrow(NullPointerException::new);
-        final Course course = this.courseRepo.findById(tutorCourseDTO.getCourseId()).orElseThrow(NullPointerException::new);
+        final SchoolCourse schoolCourse = this.schoolCourseRepo.findById(tutorCourseDTO.getSchoolCourseId()).orElseThrow(NullPointerException::new);
 
         final TutorCourse tutorCourse = new TutorCourse();
         tutorCourse.setTutor(tutor);
-        tutorCourse.setCourse(course);
+        tutorCourse.setSchoolCourse(schoolCourse);
         tutorCourse.setCreatedAt(Instant.now());
-        return this.tutorCourseRepo.save(tutorCourse);
+        return ResponseDTO.builder()
+                .data(tutorCourse)
+                .message(ResponseMessage.CREATED)
+                .build();
     }
 
-    public TutorCourse findById(Long tutorCourseId) {
-        return this.tutorCourseRepo.findById(tutorCourseId).orElseThrow(NullPointerException::new);
+    public ResponseDTO findById(Long tutorCourseId) {
+        final TutorCourse tutorCourse = this.tutorCourseRepo.findById(tutorCourseId).orElseThrow(NullPointerException::new);
+        return ResponseDTO.builder()
+                .data(tutorCourse)
+                .message(ResponseMessage.FOUND)
+                .build();
     }
 
-    public List<TutorCourse> findAll() {
-        return this.tutorCourseRepo.findAll();
+    public ResponseDTO findAll() {
+        final List<TutorCourse> tutorCourses = this.tutorCourseRepo.findAll();
+        if(tutorCourses.isEmpty()) {
+            throw new NoSuchElementFoundException();
+        }
+        return ResponseDTO.builder()
+                .data(tutorCourses)
+                .message(ResponseMessage.FOUND)
+                .build();
     }
 
-    public List<TutorCourse> findByCourse(Long courseId) {
-        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
-        return this.tutorCourseRepo.findByCourse(course);
+    public ResponseDTO findByCourse(Long schoolCourseId) {
+        final SchoolCourse schoolCourse = this.schoolCourseRepo.findById(schoolCourseId).orElseThrow(NullPointerException::new);
+        final List<TutorCourse> tutorCourses = this.tutorCourseRepo.findAllBySchoolCourse(schoolCourse).orElseThrow(NoSuchElementFoundException::new);
+        return ResponseDTO.builder()
+                .data(tutorCourses)
+                .message(ResponseMessage.FOUND)
+                .build();
     }
 
-    public TutorCourse updateTutorCourse(Long tutorCourseId, TutorCourseDTO tutorCourseDTO) {
-        final TutorCourse temp = this.tutorCourseRepo.findById(tutorCourseId).orElseThrow(NullPointerException::new);
+    public ResponseDTO updateTutorCourse(Long tutorCourseId, TutorCourseDTO tutorCourseDTO) {
+        final TutorCourse tutorCourse = this.tutorCourseRepo.findById(tutorCourseId).orElseThrow(NullPointerException::new);
         final Tutor tutor = this.tutorRepo.findById(tutorCourseDTO.getTutorId()).orElseThrow(NullPointerException::new);
-        final Course course = this.courseRepo.findById(tutorCourseDTO.getCourseId()).orElseThrow(NullPointerException::new);
-        temp.setUpdatedAt(Instant.now());
-        temp.setCourse(course);
-        temp.setTutor(tutor);
-        return this.tutorCourseRepo.save(temp);
+        final SchoolCourse schoolCourse = this.schoolCourseRepo.findById(tutorCourseDTO.getSchoolCourseId()).orElseThrow(NullPointerException::new);
+        tutorCourse.setUpdatedAt(Instant.now());
+        tutorCourse.setSchoolCourse(schoolCourse);
+        tutorCourse.setTutor(tutor);
+        return ResponseDTO.builder()
+                .data(this.tutorCourseRepo.save(tutorCourse))
+                .message(ResponseMessage.UPDATED)
+                .build();
     }
 
-    public String deleteAll() {
+    public ResponseDTO deleteAll() {
+        final List<TutorCourse> tutorCourses = this.tutorCourseRepo.findAll();
+        if(tutorCourses.isEmpty()) {
+            throw new NoSuchElementFoundException();
+        }
         this.tutorCourseRepo.deleteAll();
-        return "All tutorCourse deleted";
+        return ResponseDTO.builder()
+                .data(tutorCourses)
+                .message(ResponseMessage.DELETED)
+                .build();
     }
 
-    public String deleteById(Long tutorCourseId) {
+    public ResponseDTO deleteById(Long tutorCourseId) {
+        final TutorCourse tutorCourse = this.tutorCourseRepo.findById(tutorCourseId).orElseThrow(NullPointerException::new);
         this.tutorCourseRepo.deleteById(tutorCourseId);
-        return "TutorCourse with id: "+tutorCourseId+" deleted";
+        return ResponseDTO.builder()
+                .data(tutorCourse)
+                .message(ResponseMessage.DELETED)
+                .build();
     }
 
-    public String deleteByCourse(Long courseId) {
-        final Course course = this.courseRepo.findById(courseId).orElseThrow(NullPointerException::new);
-        this.tutorCourseRepo.deleteByCourse(course);
-        return "All tutorCourse with course "+course.getName()+" deleted";
+    public ResponseDTO deleteBySchoolCourse(Long schoolCourseId) {
+        final SchoolCourse schoolCourse = this.schoolCourseRepo.findById(schoolCourseId).orElseThrow(NullPointerException::new);
+        final List<TutorCourse> tutorCourses = this.tutorCourseRepo.findAllBySchoolCourse(schoolCourse).orElseThrow(NoSuchElementFoundException::new);
+        this.tutorCourseRepo.deleteByAllSchoolCourse(schoolCourse);
+        return ResponseDTO.builder()
+                .data(tutorCourses)
+                .message(ResponseMessage.DELETED)
+                .build();
     }
 
-    public String deleteByTutor(Long tutorId) {
+    public ResponseDTO deleteByTutor(Long tutorId) {
         final Tutor tutor = this.tutorRepo.findById(tutorId).orElseThrow(NullPointerException::new);
+        final TutorCourse tutorCourse = this.tutorCourseRepo.findById(tutorId).orElseThrow(NullPointerException::new);
         this.tutorCourseRepo.deleteByTutor(tutor);
-        return "All tutorCourse with tutor: "+tutor.getName()+" deleted";
+        return ResponseDTO.builder()
+                .data(tutorCourse)
+                .message(ResponseMessage.DELETED)
+                .build();
     }
 }

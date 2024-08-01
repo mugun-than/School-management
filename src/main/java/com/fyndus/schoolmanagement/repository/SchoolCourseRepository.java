@@ -7,12 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SchoolCourseRepository extends JpaRepository<SchoolCourse, Long> {
-    List<SchoolCourse> findBySchool(School school);
 
     void deleteBySchool(School school);
 
-    List<SchoolCourse> findAllBySchool(School school);
+    Optional<List<SchoolCourse>> findAllBySchool(School school);
 }

@@ -9,5 +9,5 @@ public class QuestionEntryDTO {
     private String option1;
     private String option2;
     private Long ans;
-    private Long courseId;
+    private Long schoolCourseId;
 }

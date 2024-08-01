@@ -21,8 +21,6 @@ public class StudentAnswer {
     @ManyToOne
     private Student student;
     @ManyToOne
-    private Course course;
-    @ManyToOne
     private Question question;
     private Long studentAns;
     private Instant createdAt;
